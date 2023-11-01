@@ -18,7 +18,13 @@ export const FormText = props => {
 
 export const FormTextInput = props => {
     return (
-        <TextInput style={styles.textInput} secureTextEntry={props.secureTextEntry} placeholder={props.placeholder}>
+        <TextInput 
+            style={styles.textInput}
+            secureTextEntry={props.secureTextEntry}
+            placeholder={props.placeholder}
+            value={props.value}
+            onChangeText={props.onChangeText}
+        >
             {props.children}
         </TextInput>
     );
