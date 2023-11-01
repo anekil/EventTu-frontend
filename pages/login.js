@@ -58,6 +58,7 @@ export function LoginScreen({ navigation }) {
                 <InfoPopup
                     isVisible={isFailurePopupVisible}
                     onClose={closeFailurePopup}
+                    info="Authentication Failed"
                 />
 
             </FormView>

@@ -1,17 +1,36 @@
 import * as React from "react";
-import { View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { PrimaryButton } from "./button";
 
-export const InfoPopup = ({ isVisible, onClose }) => {
-    return (
-      <Modal isVisible={isVisible}>
-        <View>
-          <Text>Authentication Failed</Text>
-          <Text>Please check your credentials and try again.</Text>
-          <TouchableOpacity onPress={onClose}>
-            <Text>Close</Text>
-          </TouchableOpacity>
+export const InfoPopup = props => {
+  return (
+    <Modal isVisible={props.isVisible} animationIn="fadeIn" animationOut="fadeOut">
+      <View style={styles.modalContainer}>
+        <View style={styles.iconContainer}>
+          <Icon name="times-circle" size={60} color="red" />
         </View>
-      </Modal>
-    );
-  };
+        <Text style={styles.text}>{props.info}</Text>
+        <PrimaryButton title="Close" onPress={props.onClose} />
+      </View>
+    </Modal>
+  );
+};
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  iconContainer: {
+    marginBottom: 10,
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
