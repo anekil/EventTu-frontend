@@ -13,7 +13,7 @@ export function LoginScreen({ navigation }) {
                 <FormText title="Password" />
                 <FormTextInput placeholder="Enter password" secureTextEntry={true} />
                 <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                    <PrimaryButton style={{"marginTop": 20, "marginBottom": 10}} title="Login" onPress={() => navigation.navigate('Login')} />
+                    <PrimaryButton style={{"marginTop": 20, "marginBottom": 10}} title="Login" onPress={() => navigation.navigate('Map')} />
                 </View>
                 <FormLink title="Don’t have an account yet?" onPress={() => navigation.navigate('Register')} />
                 <FormLink title="Forgot your password?" />

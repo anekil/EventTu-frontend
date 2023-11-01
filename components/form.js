@@ -4,7 +4,7 @@ import colors from "../theme/colors";
 
 export const FormView = props => {
     return (
-        <View style={styles.form}>
+        <View style={{...styles.form, ...props.style}}>
             {props.children}
         </View>
     );
