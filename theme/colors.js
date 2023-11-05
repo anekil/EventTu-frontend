@@ -6,7 +6,8 @@ const colors={
     extra_white: '#FFFFFF',
     extra_black: '#000000',
     extra_green: '#7CEA9C',
-    extra_pink: '#EB8A90'
+    extra_pink: '#EB8A90',
+    form_white: '#F2F5F8',
 };
 
 export default colors;
