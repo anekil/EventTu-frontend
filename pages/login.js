@@ -5,23 +5,49 @@ import { PrimaryButton } from "../components/button";
 import { FormView, FormText, FormTextInput, FormLink } from "../components/form";
 import { InfoPopup } from '../components/modal';
 import colors from "../theme/colors";
+import { sendTo } from '../utils/links';
 
 export function LoginScreen({ navigation }) {
-    const [login, setLogin] = React.useState('');
+    const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isFailurePopupVisible, setFailurePopupVisible] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(false);
+
+    const validateLogin = (email, password) => {
+        if(!email || !password){
+            return { isOk: false, msg: "All fields are required" };
+        }
+        if(!email.includes('@')) {
+            return { isOk: false, msg: "Email should contains \'@\'" };
+        }
+        return { isOk: true, msg: "Login is valid" };
+    }
 
     const handleLogin = () => {
-        axios.post('www-placeholder', {
-          login,
-          password,
-        })
-        .then(response => {
-            navigation.navigate('Map');
-        })
-        .catch(error => {
+        const { isOk, msg } = validateLogin(email, password);
+        if(!isOk){
+            setErrorMessage(msg)
             setFailurePopupVisible(true);
-        });
+        }
+        else{
+            console.log("here");
+            console.log(isOk);
+            console.log(msg);
+            axios.post(sendTo("login"), {
+                "email": email,
+                "password": password,
+              })
+              .then(response => {
+                  console.log(response)
+                  navigation.navigate('Map');
+              })
+              .catch(error => {
+                  console.log(error)
+                  setErrorMessage(String(error))
+                  setFailurePopupVisible(true);
+              });
+        }
+        
     };
 
     const closeFailurePopup = () => {
@@ -32,12 +58,12 @@ export function LoginScreen({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.extra_white, }}>
             <FormView>
 
-                <FormText title="Login"/>
+                <FormText title="Email"/>
                 <FormTextInput 
-                    placeholder="Enter login" 
+                    placeholder="Enter email" 
                     secureTextEntry={false} 
-                    value={login} 
-                    onChangeText={text => setLogin(text)}
+                    value={email} 
+                    onChangeText={text => setEmail(text)}
                 />
 
                 <FormText title="Password" />
@@ -58,7 +84,7 @@ export function LoginScreen({ navigation }) {
                 <InfoPopup
                     isVisible={isFailurePopupVisible}
                     onClose={closeFailurePopup}
-                    info="Authentication Failed"
+                    info={errorMessage}
                 />
 
             </FormView>
