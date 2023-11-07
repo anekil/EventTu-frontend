@@ -5,25 +5,68 @@ import { PrimaryButton } from "../components/button";
 import { FormView, FormText, FormTextInput } from "../components/form";
 import { InfoPopup } from '../components/modal';
 import colors from "../theme/colors";
+import { sendTo } from '../utils/links';
 
 export function RegisterScreen({ navigation }) {
+    const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
-    const [login, setLogin] = React.useState('');
+    const [tel, setTel] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [repeatPassword, setRepeatPassword] = React.useState('');
     const [isFailurePopupVisible, setFailurePopupVisible] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(false);
+
+    const validateRegister = (name, email, tel, password, repeatPassword) => {
+        if(!name || !email || !tel || !password || !repeatPassword){
+            return { isOk: false, msg: "All fields are required" };
+        }
+
+        if (!email.includes('@')) {
+            return { isOk: false, msg: "Email should contain '@'" };
+        }
+        
+        if (!/^\d{9}$/.test(tel)) {
+            return { isOk: false, msg: "Telephone number should be a 9-digit number" };
+        }
+    
+        if (password.length < 8) {
+            return { isOk: false, msg: "Password should be at least 8 characters long" };
+        }
+    
+        if (password !== repeatPassword) {
+            return { isOk: false, msg: "Password and repeated password do not match" };
+        }
+    
+        return { isOk: true, msg: "Registration is valid" };
+    }
 
     const handleRegister = () => {
-        axios.post('www-placeholder', {
-          login,
-          password,
-        })
-        .then(response => {
-            navigation.navigate('Map');
-        })
-        .catch(error => {
+        const { isOk, msg } = validateRegister(name, email, tel, password, repeatPassword);
+        if(!isOk){
+            setErrorMessage(msg)
             setFailurePopupVisible(true);
-        });
+        }
+        else{
+            console.log("here");
+            console.log(isOk);
+            console.log(msg);
+            axios.post(sendTo("register"), {
+                "name": name,
+                "email": email,
+                "telephone": tel,
+                "password": password
+              })
+              .then(response => {
+                  console.log(response)
+                  navigation.navigate('Login');
+              })
+              .catch(error => {
+                  console.log(error)
+                  setErrorMessage(String(error))
+                  setFailurePopupVisible(true);
+              });
+        }
+        
     };
 
     const closeFailurePopup = () => {
@@ -34,6 +77,14 @@ export function RegisterScreen({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.extra_white, }}>
             <FormView>
 
+                <FormText title="name"/>
+                <FormTextInput
+                    placeholder="Enter Name"
+                    secureTextEntry={false}
+                    value={name} 
+                    onChangeText={text => setName(text)}
+                />
+
                 <FormText title="email"/>
                 <FormTextInput
                     placeholder="Enter email" 
@@ -42,12 +93,12 @@ export function RegisterScreen({ navigation }) {
                     onChangeText={text => setEmail(text)}
                 />
 
-                <FormText title="login"/>
+                <FormText title="telephone" />
                 <FormTextInput
-                    placeholder="Enter ligin"
+                    placeholder="Enter tel" 
                     secureTextEntry={false}
-                    value={login} 
-                    onChangeText={text => setLogin(text)}
+                    value={tel} 
+                    onChangeText={text => setTel(text)}
                 />
 
                 <FormText title="password" />
@@ -73,7 +124,7 @@ export function RegisterScreen({ navigation }) {
                 <InfoPopup
                     isVisible={isFailurePopupVisible}
                     onClose={closeFailurePopup}
-                    info="Account creation Failed"
+                    info={errorMessage}
                 />
 
             </FormView>
