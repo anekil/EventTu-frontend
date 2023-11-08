@@ -2,7 +2,7 @@ import * as React from 'react';
 import axios from 'axios';
 import { View } from 'react-native';
 import { PrimaryButton } from "../components/button";
-import { FormView, FormText, FormTextInput, FormLink } from "../components/form";
+import {FormView, FormText, FormTextInput, FormLink, SubmitButton} from "../components/form";
 import { InfoPopup } from '../components/modal';
 import colors from "../theme/colors";
 import { sendTo } from '../utils/links';
@@ -74,9 +74,7 @@ export function LoginScreen({ navigation }) {
                     onChangeText={text => setPassword(text)}
                 />
 
-                <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                    <PrimaryButton style={{"marginTop": 20, "marginBottom": 10}} title="Login" onPress={handleLogin} />
-                </View>
+                <SubmitButton title="Login" onPress={handleLogin} />
 
                 <FormLink title="Don’t have an account yet?" onPress={() => navigation.navigate('Register')} />
                 <FormLink title="Forgot your password?" />
