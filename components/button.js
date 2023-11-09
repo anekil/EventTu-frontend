@@ -1,10 +1,10 @@
-import {Pressable, StyleSheet, Text} from "react-native";
+import {Pressable, StyleSheet, Text, Touchable} from "react-native";
 import * as React from "react";
 import colors from "../theme/colors";
 
 export const PrimaryButton = props => {
     return (
-        <Pressable style={{...styles.primaryButton, ...props.style}}  onPress = {props.onPress}>
+        <Pressable style={{...styles.blackBorder, ...styles.primaryButton, ...props.style}}  onPress = {props.onPress}>
             <Text style={styles.primaryText}>{props.title}</Text>
         </Pressable>
     );
@@ -12,21 +12,32 @@ export const PrimaryButton = props => {
 
 export const HeaderButton = props => {
     return (
-        <Pressable style={{...styles.headerButton, ...props.style}} onPress = {props.onPress}>
+        <Pressable style={{...styles.blackBorder, ...styles.headerButton, ...props.style}} onPress = {props.onPress}>
             <Text style={styles.headerText}>{props.title}</Text>
         </Pressable>
     );
 }
 
+export const TagChip = props => {
+    return (
+        <Pressable style={{...styles.blackBorder, ...styles.tagChip, ...props.style}}>
+            <Text style={styles.tagText}>{props.title}</Text>
+        </Pressable>
+    );
+}
+
 const styles = StyleSheet.create({
-    primaryButton: {
-        backgroundColor: colors.secondary,
+    blackBorder: {
         borderWidth: 2,
         borderStyle: "solid",
-        borderColor: colors.extra_black,
+        borderColor: colors.extra_black
+    },
+
+    primaryButton: {
+        backgroundColor: colors.secondary,
         borderRadius: 20,
-        width: 148,
-        height: 34,
+        padding: 6,
+        margin: 5
     },
     primaryText: {
         textAlign: "center",
@@ -37,9 +48,6 @@ const styles = StyleSheet.create({
 
     headerButton: {
         backgroundColor: colors.primary_dark,
-        borderWidth: 2,
-        borderStyle: "solid",
-        borderColor: colors.extra_black,
         borderRadius: 10,
         padding: 10,
         height: 56,
@@ -50,6 +58,19 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: colors.extra_white,
         fontSize: 20,
+        fontWeight: "800",
+    },
+
+    tagChip: {
+        backgroundColor: colors.primary_light,
+        borderRadius: 15,
+        padding: 5,
+        margin: 5,
+    },
+    tagText: {
+        textAlign: "center",
+        color: colors.extra_black,
+        fontSize: 16,
         fontWeight: "800",
     }
 });

@@ -1,12 +1,16 @@
 import React, {useState} from 'react';
-import {Button, SafeAreaView, View, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import {FormText, FormView, SubmitButton} from "../components/form";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {PrimaryButton, TagChip} from "../components/button";
 // https://github.com/react-native-datetimepicker/datetimepicker
+import Slider from '@react-native-community/slider';
+import colors from "../theme/colors";
+// https://github.com/callstack/react-native-slider
 
 export function FiltersScreen({ navigation }) {
 
-    const [date, setDate] = useState(new Date(1598051730000));
+    const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
 
@@ -40,9 +44,8 @@ export function FiltersScreen({ navigation }) {
                 <FormText title="Choose filters"/>
 
                 <FormText title="Date"/>
-
-                <Button onPress={showDatepicker} title="Show date picker!" />
-                <Button onPress={showTimepicker} title="Show time picker!" />
+                <PrimaryButton onPress={showDatepicker} title="Show date picker!" />
+                <PrimaryButton onPress={showTimepicker} title="Show time picker!" />
                 <Text>selected: {date.toLocaleString()}</Text>
                 {show && (
                     <DateTimePicker
@@ -55,8 +58,20 @@ export function FiltersScreen({ navigation }) {
                 )}
 
                 <FormText title="Location"/>
+                <Slider
+                    style={{width: 200}}
+                    minimumValue={10}
+                    maximumValue={50}
+                    step={5}
+                    minimumTrackTintColor={colors.form_white}
+                    maximumTrackTintColor={colors.form_white}
+                    thumbTintColor={colors.primary_light}
+                />
 
                 <FormText title="Tags"/>
+                <PrimaryButton title={"+"} />
+                <TagChip title={"Tag"} />
+
 
                 <SubmitButton title="Filter" onPress={handleFiltering} />
             </FormView>
