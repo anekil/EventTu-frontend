@@ -6,7 +6,11 @@ import { PrimaryButton } from "./button";
 
 export const InfoPopup = props => {
   return (
-    <Modal isVisible={props.isVisible} animationIn="fadeIn" animationOut="fadeOut">
+    <Modal
+      isVisible={props.isVisible}
+      animationIn="fadeIn"
+      animationOut="fadeOut"
+    >
       <View style={styles.modalContainer}>
         <View style={styles.iconContainer}>
           <Icon name="times-circle" size={60} color="red" />
