@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { Modal, View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 export const AddEventModal = props => {
     return (

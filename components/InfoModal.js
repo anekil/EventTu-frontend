@@ -1,8 +1,8 @@
 import * as React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { PrimaryButton } from "./button";
+import { PrimaryButton } from "./Button";
 
 export const InfoPopup = props => {
   return (

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen } from "./pages/home";
-import { RegisterScreen } from "./pages/register";
-import { LoginScreen } from "./pages/login";
-import { MapScreen } from "./pages/map";
-import { HeaderButton } from "./components/button";
+import { HomeScreen } from "./pages/Home";
+import { RegisterScreen } from "./pages/Register";
+import { LoginScreen } from "./pages/Login";
+import { MapScreen } from "./pages/Map";
+import { HeaderButton } from "./components/Button";
 
 const Stack = createNativeStackNavigator();
 

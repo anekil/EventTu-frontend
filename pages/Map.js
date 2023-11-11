@@ -1,37 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import MapView, { Marker, Callout, Circle } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
-import { sendTo } from '../utils/links';
 
-import { AddEventModal} from '../components/AddEventModal';
+import { sendTo } from '../utils/Links';
 
 export const MapScreen = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [pin, setPin] = useState(null);
-  const [eventInfo, setEventInfo] = useState({ tags: '', date: '' });
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const circleRadius = 2000
-
   const [markers, setMarkers] = useState([]);
-
-  const [eventData, setEventData] = useState({
-    title: '',
-    eventLink: '',
-    tags: [],
-    image: null,
-    description: '',
-    localization: null
-  });
+  const circleRadius = 2000
 
   const handleLongPress = (event) => {
     console.log("Entered handleLongPress");
     setPin(event.nativeEvent.coordinate);
-    setModalVisible(true);
   };
 
   // TODO: Dummy events (will be deleted when CORS will works)
@@ -64,6 +49,7 @@ export const MapScreen = () => {
     }
   }
 
+  // event for map drag
   const onRegionChangeComplete = (region) => {
     console.log("Entered onRegionChangeComplete: " + JSON.stringify(region));
     setLocation(region);
@@ -103,6 +89,7 @@ export const MapScreen = () => {
       });
     })();
   }, []);
+  
 
   return (
     <View style={styles.container}>
