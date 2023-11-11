@@ -33,7 +33,7 @@ export function LoginScreen({ navigation }) {
             console.log("here");
             console.log(isOk);
             console.log(msg);
-            axios.post(sendTo("login"), {
+            axios.post(sendTo("auth/login"), {
                 "email": email,
                 "password": password,
               })

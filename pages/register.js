@@ -50,7 +50,7 @@ export function RegisterScreen({ navigation }) {
             console.log("here");
             console.log(isOk);
             console.log(msg);
-            axios.post(sendTo("register"), {
+            axios.post(sendTo("auth/register"), {
                 "name": name,
                 "email": email,
                 "telephone": tel,
