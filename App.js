@@ -6,6 +6,7 @@ import { RegisterScreen } from "./pages/register";
 import { LoginScreen } from "./pages/login";
 import { MapScreen } from "./pages/map";
 import { HeaderButton } from "./components/button";
+import {FiltersScreen} from "./pages/filters";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export default function App() {
               <Stack.Screen name="Register" component={RegisterScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Map" component={MapScreen} />
+              <Stack.Screen name="Filters" component={FiltersScreen} />
           </Stack.Navigator>
       </NavigationContainer>
   );

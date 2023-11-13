@@ -4,8 +4,8 @@ import colors from "../theme/colors";
 
 export const PrimaryButton = props => {
     return (
-        <Pressable style={{...styles.blackBorder, ...styles.primaryButton, ...props.style}}  onPress = {props.onPress}>
-            <Text style={styles.primaryText}>{props.title}</Text>
+        <Pressable style={{...styles.blackBorder, ...styles.buttonText, ...styles.primaryButton, ...props.style}}  onPress = {props.onPress}>
+            <Text style={{...styles.buttonText, ...styles.primaryText}}>{props.title}</Text>
         </Pressable>
     );
 }
@@ -13,6 +13,14 @@ export const PrimaryButton = props => {
 export const HeaderButton = props => {
     return (
         <Pressable style={{...styles.blackBorder, ...styles.headerButton, ...props.style}} onPress = {props.onPress}>
+            <Text style={{...styles.buttonText, ...styles.headerText}}>{props.title}</Text>
+        </Pressable>
+    );
+}
+
+export const FloatingButton = props => {
+    return (
+        <Pressable style={{...styles.blackBorder, ...styles.floatingButton, ...props.style}} onPress = {props.onPress}>
             <Text style={styles.headerText}>{props.title}</Text>
         </Pressable>
     );
@@ -20,8 +28,8 @@ export const HeaderButton = props => {
 
 export const TagChip = props => {
     return (
-        <Pressable style={{...styles.blackBorder, ...styles.tagChip, ...props.style}}>
-            <Text style={styles.tagText}>{props.title}</Text>
+        <Pressable style={{...styles.blackBorder, ...styles.buttonText, ...styles.tagChip, ...props.style}}>
+            <Text style={{...styles.buttonText, ...styles.tagText}}>{props.title}</Text>
         </Pressable>
     );
 }
@@ -32,6 +40,11 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderColor: colors.extra_black
     },
+    buttonText: {
+        textAlign: "center",
+        fontSize: 20,
+        fontWeight: "800",
+    },
 
     primaryButton: {
         backgroundColor: colors.secondary,
@@ -40,10 +53,7 @@ const styles = StyleSheet.create({
         margin: 5
     },
     primaryText: {
-        textAlign: "center",
         color: colors.extra_black,
-        fontSize: 20,
-        fontWeight: "800",
     },
 
     headerButton: {
@@ -55,10 +65,13 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     headerText: {
-        textAlign: "center",
         color: colors.extra_white,
-        fontSize: 20,
-        fontWeight: "800",
+    },
+
+    floatingButton: {
+        backgroundColor: colors.secondary,
+        borderRadius: 50,
+        padding: 6,
     },
 
     tagChip: {
@@ -68,9 +81,7 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     tagText: {
-        textAlign: "center",
         color: colors.extra_black,
         fontSize: 16,
-        fontWeight: "800",
     }
 });
