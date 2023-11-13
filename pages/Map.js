@@ -6,8 +6,11 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
 import { sendTo } from '../utils/Links';
+import {FloatingButton} from "../components/Buttons"
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faMugSaucer } from '@fortawesome/free-solid-svg-icons/faMugSaucer'
 
-export const MapScreen = () => {
+export const MapScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [pin, setPin] = useState(null);
@@ -130,6 +133,10 @@ export const MapScreen = () => {
       ) : (
         <Text>{errorMsg}</Text>
       )}
+
+      <FloatingButton onPress={() => navigation.navigate('Filters')}>
+        <FontAwesomeIcon icon={ faMugSaucer } />
+      </FloatingButton>
 
     </View>
   );

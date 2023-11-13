@@ -71,6 +71,11 @@ const styles = StyleSheet.create({
     floatingButton: {
         backgroundColor: colors.secondary,
         borderRadius: 50,
+        width: 60,
+        height: 60,
+        position: 'absolute',
+        bottom: 10,
+        right: 10,
         padding: 6,
     },
 
