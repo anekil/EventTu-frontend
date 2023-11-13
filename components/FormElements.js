@@ -1,7 +1,7 @@
 import {StyleSheet, View, Text, TextInput} from "react-native";
 import * as React from "react";
-import colors from "../theme/colors";
-import {PrimaryButton} from "./button";
+import colors from "../theme/Colors";
+import {PrimaryButton} from "./Buttons";
 
 export const FormView = props => {
     return (

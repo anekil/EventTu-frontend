@@ -1,6 +1,6 @@
 import {Pressable, StyleSheet, Text, Touchable} from "react-native";
 import * as React from "react";
-import colors from "../theme/colors";
+import colors from "../theme/Colors";
 
 export const PrimaryButton = props => {
     return (

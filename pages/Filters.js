@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text} from 'react-native';
-import {FormText, FormView, SubmitButton} from "../components/form";
+import {FormText, FormView, SubmitButton} from "../components/FormElements";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {PrimaryButton, TagChip} from "../components/button";
+import {PrimaryButton, TagChip} from "../components/Buttons";
 // https://github.com/react-native-datetimepicker/datetimepicker
 import Slider from '@react-native-community/slider';
-import colors from "../theme/colors";
+import colors from "../theme/Colors";
 // https://github.com/callstack/react-native-slider
 
 export function FiltersScreen({ navigation }) {

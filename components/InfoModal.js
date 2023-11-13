@@ -1,12 +1,16 @@
 import * as React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { PrimaryButton } from "./button";
+import { PrimaryButton } from "./Buttons";
 
 export const InfoPopup = props => {
   return (
-    <Modal isVisible={props.isVisible} animationIn="fadeIn" animationOut="fadeOut">
+    <Modal
+      isVisible={props.isVisible}
+      animationIn="fadeIn"
+      animationOut="fadeOut"
+    >
       <View style={styles.modalContainer}>
         <View style={styles.iconContainer}>
           <Icon name="times-circle" size={60} color="red" />

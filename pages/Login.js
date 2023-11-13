@@ -1,11 +1,10 @@
 import * as React from 'react';
 import axios from 'axios';
 import { View } from 'react-native';
-import { PrimaryButton } from "../components/button";
-import {FormView, FormText, FormTextInput, FormLink, SubmitButton} from "../components/form";
-import { InfoPopup } from '../components/modal';
-import colors from "../theme/colors";
-import { sendTo } from '../utils/links';
+import { FormView, FormText, FormTextInput, FormLink, SubmitButton } from "../components/FormElements";
+import { InfoPopup } from '../components/InfoModal';
+import colors from "../theme/Colors";
+import { sendTo } from '../utils/Links';
 
 export function LoginScreen({ navigation }) {
     const [email, setEmail] = React.useState('');
@@ -33,7 +32,7 @@ export function LoginScreen({ navigation }) {
             console.log("here");
             console.log(isOk);
             console.log(msg);
-            axios.post(sendTo("login"), {
+            axios.post(sendTo("auth/login"), {
                 "email": email,
                 "password": password,
               })

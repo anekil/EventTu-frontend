@@ -1,11 +1,10 @@
 import * as React from 'react';
 import axios from 'axios';
 import { View } from 'react-native';
-import { PrimaryButton } from "../components/button";
-import {FormView, FormText, FormTextInput, SubmitButton} from "../components/form";
-import { InfoPopup } from '../components/modal';
-import colors from "../theme/colors";
-import { sendTo } from '../utils/links';
+import { FormView, FormText, FormTextInput, SubmitButton } from "../components/FormElements";
+import { InfoPopup } from '../components/InfoModal';
+import colors from "../theme/Colors";
+import { sendTo } from '../utils/Links';
 
 export function RegisterScreen({ navigation }) {
     const [name, setName] = React.useState('');
@@ -50,7 +49,7 @@ export function RegisterScreen({ navigation }) {
             console.log("here");
             console.log(isOk);
             console.log(msg);
-            axios.post(sendTo("register"), {
+            axios.post(sendTo("auth/register"), {
                 "name": name,
                 "email": email,
                 "telephone": tel,

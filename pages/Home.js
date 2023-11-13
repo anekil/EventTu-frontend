@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { PrimaryButton } from "../components/button";
-import { FormView, FormText, FormTextInput } from "../components/form";
-import colors from "../theme/colors";
+import { PrimaryButton } from "../components/Buttons";
+import { FormView, FormText } from "../components/FormElements";
+import colors from "../theme/Colors";
 
 export function HomeScreen({ navigation }) {
     return (
