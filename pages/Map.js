@@ -6,8 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
 import { sendTo } from '../utils/Links';
+import { FloatingButton } from "../components/Buttons"
+import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
 
-export const MapScreen = () => {
+export const MapScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [pin, setPin] = useState(null);
@@ -130,6 +132,8 @@ export const MapScreen = () => {
       ) : (
         <Text>{errorMsg}</Text>
       )}
+
+      <FloatingButton icon={ faFilter } onPress={() => navigation.navigate('Filters')} />
 
     </View>
   );

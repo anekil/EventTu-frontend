@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { PrimaryButton } from "../components/Button";
+import { PrimaryButton } from "../components/Buttons";
 import { FormView, FormText } from "../components/FormElements";
 import colors from "../theme/Colors";
 

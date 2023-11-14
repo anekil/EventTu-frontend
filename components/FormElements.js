@@ -1,6 +1,7 @@
 import {StyleSheet, View, Text, TextInput} from "react-native";
 import * as React from "react";
 import colors from "../theme/Colors";
+import {PrimaryButton} from "./Buttons";
 
 export const FormView = props => {
     return (
@@ -33,6 +34,14 @@ export const FormTextInput = props => {
 export const FormLink = props => {
     return (
         <Text style={styles.link} onPress={props.onPress}>{props.title}</Text>
+    );
+}
+
+export const SubmitButton = props => {
+    return (
+        <View style={{alignItems: 'center', justifyContent: 'center',}}>
+            <PrimaryButton style={{"marginTop": 20, "marginBottom": 10}} title={props.title} onPress={props.onPress} />
+        </View>
     );
 }
 

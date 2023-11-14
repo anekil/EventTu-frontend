@@ -1,8 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 import { View } from 'react-native';
-import { PrimaryButton } from "../components/Button";
-import { FormView, FormText, FormTextInput } from "../components/FormElements";
+import { FormView, FormText, FormTextInput, SubmitButton } from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
 import colors from "../theme/Colors";
 import { sendTo } from '../utils/Links';
@@ -117,9 +116,7 @@ export function RegisterScreen({ navigation }) {
                     onChangeText={text => setRepeatPassword(text)}
                 />
 
-                <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                    <PrimaryButton style={{"marginTop": 20}} title="Register" onPress={handleRegister} />
-                </View>
+                <SubmitButton title="Register" onPress={handleRegister} />
 
                 <InfoPopup
                     isVisible={isFailurePopupVisible}
