@@ -30,6 +30,16 @@ export const FloatingButton = props => {
     );
 }
 
+export const IconButton = props => {
+    return (
+        <Pressable style={{...props.style, width: 40, height: 40,}} onPress = {props.onPress}>
+            <View style={ styles.centerContent }>
+                <FontAwesomeIcon icon={ props.icon } size={ 28 } />
+            </View>
+        </Pressable>
+    );
+}
+
 export const TagChip = props => {
     return (
         <Pressable style={{...styles.blackBorder, ...styles.buttonText, ...styles.tagChip, ...props.style}}>

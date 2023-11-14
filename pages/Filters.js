@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {FormText, FormView, SubmitButton} from "../components/FormElements";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {PrimaryButton, TagChip} from "../components/Buttons";
+import {IconButton, PrimaryButton, TagChip} from "../components/Buttons";
 // https://github.com/react-native-datetimepicker/datetimepicker
 import Slider from '@react-native-community/slider';
 import colors from "../theme/Colors";
 // https://github.com/callstack/react-native-slider
+import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
+import {faClock} from "@fortawesome/free-solid-svg-icons/faClock";
+import {faAdd} from "@fortawesome/free-solid-svg-icons/faAdd";
 
 export function FiltersScreen({ navigation }) {
 
@@ -33,6 +36,8 @@ export function FiltersScreen({ navigation }) {
         showMode('time');
     };
 
+    const [distance, setDistance] = React.useState(10);
+
 
     const handleFiltering = () => {
 
@@ -44,9 +49,15 @@ export function FiltersScreen({ navigation }) {
                 <FormText title="Choose filters"/>
 
                 <FormText title="Date"/>
-                <PrimaryButton onPress={showDatepicker} title="Show date picker!" />
-                <PrimaryButton onPress={showTimepicker} title="Show time picker!" />
-                <Text>selected: {date.toLocaleString()}</Text>
+                <View style={ styles.propertyContainer }>
+                    <IconButton onPress={showDatepicker} icon={ faCalendar } />
+                    <Text>{date.toLocaleDateString()}</Text>
+                </View>
+                <View style={ styles.propertyContainer }>
+                    <IconButton onPress={showTimepicker} icon={ faClock } />
+                    <Text>{date.toLocaleTimeString()}</Text>
+                </View>
+
                 {show && (
                     <DateTimePicker
                         testID="dateTimePicker"
@@ -58,23 +69,37 @@ export function FiltersScreen({ navigation }) {
                 )}
 
                 <FormText title="Location"/>
-                <Slider
-                    style={{width: 200}}
-                    minimumValue={10}
-                    maximumValue={50}
-                    step={5}
-                    minimumTrackTintColor={colors.primary_dark}
-                    maximumTrackTintColor={colors.form_white}
-                    thumbTintColor={colors.primary_light}
-                />
+                <View style={ styles.propertyContainer }>
+                    <Slider
+                        style={{width: 200}}
+                        value={distance}
+                        onValueChange={newDist => setDistance(newDist)}
+                        minimumValue={10}
+                        maximumValue={50}
+                        step={5}
+                        minimumTrackTintColor={colors.primary_dark}
+                        maximumTrackTintColor={colors.form_white}
+                        thumbTintColor={colors.primary_light}
+                    />
+                    <Text>{ distance} km</Text>
+                </View>
 
-                <FormText title="Tags"/>
-                <PrimaryButton title={"+"} />
+                <View style={ styles.propertyContainer }>
+                    <FormText title="Tags"/>
+                    <IconButton icon={ faAdd } />
+                </View>
                 <TagChip title={"Tag"} />
-
 
                 <SubmitButton title="Filter" onPress={handleFiltering} />
             </FormView>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    propertyContainer: {
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+});
