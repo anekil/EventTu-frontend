@@ -44,7 +44,7 @@ export function FiltersScreen({ navigation }) {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.extra_white }}>
             <FormView style={{alignItems: 'center', justifyContent: 'center',}}>
                 <FormText title="Choose filters"/>
 
