@@ -1,6 +1,8 @@
-import {Pressable, StyleSheet, Text, Touchable} from "react-native";
+import {Pressable, StyleSheet, Text, Touchable, View} from "react-native";
 import * as React from "react";
 import colors from "../theme/Colors";
+import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
+import {faMugSaucer} from "@fortawesome/free-solid-svg-icons/faMugSaucer";
 
 export const PrimaryButton = props => {
     return (
@@ -21,7 +23,9 @@ export const HeaderButton = props => {
 export const FloatingButton = props => {
     return (
         <Pressable style={{...styles.blackBorder, ...styles.floatingButton, ...props.style}} onPress = {props.onPress}>
-            <Text style={styles.headerText}>{props.title}</Text>
+            <View style={ styles.centerContent }>
+                <FontAwesomeIcon icon={ props.icon } size={ 36 } />
+            </View>
         </Pressable>
     );
 }
@@ -68,14 +72,19 @@ const styles = StyleSheet.create({
         color: colors.extra_white,
     },
 
+    centerContent: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     floatingButton: {
         backgroundColor: colors.secondary,
         borderRadius: 50,
         width: 60,
         height: 60,
         position: 'absolute',
-        bottom: 10,
-        right: 10,
+        bottom: 15,
+        right: 15,
         padding: 6,
     },
 

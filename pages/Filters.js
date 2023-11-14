@@ -63,7 +63,7 @@ export function FiltersScreen({ navigation }) {
                     minimumValue={10}
                     maximumValue={50}
                     step={5}
-                    minimumTrackTintColor={colors.form_white}
+                    minimumTrackTintColor={colors.primary_dark}
                     maximumTrackTintColor={colors.form_white}
                     thumbTintColor={colors.primary_light}
                 />
