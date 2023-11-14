@@ -25,8 +25,8 @@ const EventsNavigator = () => {
             tabBarActiveBackgroundColor: colors.primary_light,
             tabBarStyle: { borderTopWidth: 2, borderStyle: "solid", borderColor: colors.extra_black}
         }}>
-            <Tab.Screen name="Map" component={MapScreen} options={{headerShown: false, tabBarIcon: ({color}) => <FontAwesomeIcon icon={ faMap } color={color}/>}}/>
-            <Tab.Screen name="List" component={ListScreen} options={{headerShown: false, tabBarIcon: ({color}) => <FontAwesomeIcon icon={ faList } color={color}/>}}/>
+            <Tab.Screen name="Map" component={MapScreen} options={{orientation: 'all', headerShown: false, tabBarIcon: ({color}) => <FontAwesomeIcon icon={ faMap } color={color}/>}}/>
+            <Tab.Screen name="List" component={ListScreen} options={{orientation: 'all', headerShown: false, tabBarIcon: ({color}) => <FontAwesomeIcon icon={ faList } color={color}/>}}/>
         </Tab.Navigator>
     );
 };
@@ -34,13 +34,12 @@ const EventsNavigator = () => {
 export default function App() {
   return (
       <NavigationContainer>
-        <HeaderButton title="EventTu" />
           <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Home" component={HomeScreen} />
-              <Stack.Screen name="Register" component={RegisterScreen} />
-              <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Browse Events" component={EventsNavigator} />
-              <Stack.Screen name="Filters" component={FiltersScreen} />
+              <Stack.Screen name="Home" component={HomeScreen} options={{orientation: 'all'}}/>
+              <Stack.Screen name="Register" component={RegisterScreen} options={{orientation: 'all'}}/>
+              <Stack.Screen name="Login" component={LoginScreen} options={{orientation: 'all'}}/>
+              <Stack.Screen name="Browse Events" component={EventsNavigator} options={{orientation: 'all'}}/>
+              <Stack.Screen name="Filters" component={FiltersScreen} options={{orientation: 'all'}}/>
           </Stack.Navigator>
       </NavigationContainer>
   );
