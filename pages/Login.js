@@ -1,6 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 import { View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import { FormView, FormText, FormTextInput, FormLink, SubmitButton } from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
 import colors from "../theme/Colors";
@@ -11,6 +12,8 @@ export function LoginScreen({ navigation }) {
     const [password, setPassword] = React.useState('');
     const [isFailurePopupVisible, setFailurePopupVisible] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(false);
+
+    const { role } = useRoute().params;
 
     const validateLogin = (email, password) => {
         if(!email || !password){
@@ -75,7 +78,7 @@ export function LoginScreen({ navigation }) {
 
                 <SubmitButton title="Login" onPress={handleLogin} />
 
-                <FormLink title="Don’t have an account yet?" onPress={() => navigation.navigate('Register')} />
+                <FormLink title="Don’t have an account yet?" onPress={() => navigation.navigate('Register', {role: role})} />
                 <FormLink title="Forgot your password?" />
 
                 <InfoPopup
@@ -85,6 +88,9 @@ export function LoginScreen({ navigation }) {
                 />
 
             </FormView>
+
+            <SubmitButton title="Bypass" onPress={() => navigation.navigate('Map')} />
+
         </View>
     );
 }
