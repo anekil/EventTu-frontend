@@ -9,6 +9,7 @@ import { sendTo } from '../utils/Links';
 import { Role } from "../utils/RoleEnum";
 
 export function LoginScreen({ navigation }) {
+    console.log("here");
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isFailurePopupVisible, setFailurePopupVisible] = React.useState(false);
@@ -90,7 +91,7 @@ export function LoginScreen({ navigation }) {
 
             </FormView>
 
-            <SubmitButton title="Bypass" onPress={role === Role.ORGANIZER ? () => navigation.navigate('OrganizerEvents') : navigation.navigate('Map')} />
+            <SubmitButton title="Bypass" onPress={role === Role.ORGANIZER ? () => navigation.navigate('OrganizerEvents') : () => navigation.navigate('Browse Events')} />
 
         </View>
     );
