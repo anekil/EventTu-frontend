@@ -6,6 +6,7 @@ import { FormView, FormText, FormTextInput, FormLink, SubmitButton } from "../co
 import { InfoPopup } from '../components/InfoModal';
 import colors from "../theme/Colors";
 import { sendTo } from '../utils/Links';
+import { Role } from "../utils/RoleEnum";
 
 export function LoginScreen({ navigation }) {
     const [email, setEmail] = React.useState('');
@@ -89,7 +90,7 @@ export function LoginScreen({ navigation }) {
 
             </FormView>
 
-            <SubmitButton title="Bypass" onPress={() => navigation.navigate('Map')} />
+            <SubmitButton title="Bypass" onPress={role === Role.ORGANIZER ? () => navigation.navigate('OrganizerEvents') : navigation.navigate('Map')} />
 
         </View>
     );
