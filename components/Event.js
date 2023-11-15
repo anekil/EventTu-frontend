@@ -5,7 +5,7 @@ import { FormView, FormText } from "../components/FormElements";
 import colors from "../theme/Colors";
 import { Role } from "../utils/RoleEnum";
 
-export function HomeScreen({ navigation }) {
+export function EventTail() {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FormView style={{alignItems: 'center', justifyContent: 'center',}}>

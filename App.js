@@ -8,6 +8,8 @@ import { LoginScreen } from "./pages/Login";
 import { MapScreen } from "./pages/Map";
 import { HeaderButton } from "./components/Buttons";
 import {FiltersScreen} from "./pages/Filters";
+import {OrganizerEventsScreen} from "./pages/OrganizerEvents";
+import {EventDetailsScreen} from "./pages/EventDetails";
 import {ListScreen} from "./pages/List";
 import colors from "./theme/Colors";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
@@ -40,6 +42,8 @@ export default function App() {
               <Stack.Screen name="Login" component={LoginScreen} options={{orientation: 'all'}}/>
               <Stack.Screen name="Browse Events" component={EventsNavigator} options={{orientation: 'all'}}/>
               <Stack.Screen name="Filters" component={FiltersScreen} options={{orientation: 'all'}}/>
+              <Stack.Screen name="OrganizerEvents" component={OrganizerEventsScreen} options={{orientation: 'all'}}/>
+              <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{orientation: 'all'}}/>
           </Stack.Navigator>
       </NavigationContainer>
   );
