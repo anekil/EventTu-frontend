@@ -71,12 +71,9 @@ const styles = StyleSheet.create({
     },
 
     headerButton: {
-        backgroundColor: colors.primary_dark,
-        borderRadius: 10,
-        padding: 10,
-        height: 56,
-        margin: 10,
-        marginTop: 30,
+        backgroundColor: colors.extra_black,
+        borderRadius: 40,
+        padding: 6
     },
     headerText: {
         color: colors.extra_white,
