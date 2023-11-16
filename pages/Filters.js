@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {FormText, FormView, SubmitButton} from "../components/FormElements";
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {FormText, FormView, SubmitButton, TagsPicker} from "../components/FormElements";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {IconButton, PrimaryButton, TagChip} from "../components/Buttons";
 // https://github.com/react-native-datetimepicker/datetimepicker
@@ -37,15 +37,15 @@ export function FiltersScreen({ navigation }) {
     };
 
     const [distance, setDistance] = React.useState(10);
-
+    const [selectedTags, setSelectedTags] = React.useState([]);
 
     const handleFiltering = () => {
 
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.extra_white }}>
-            <FormView style={{alignItems: 'center', justifyContent: 'center',}}>
+        <ScrollView scrollEnabled={true} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <FormView style={{ width: '80%', marginTop: 40, marginBottom: 40 }}>
                 <FormText title="Choose filters"/>
 
                 <FormText title="Date"/>
@@ -84,15 +84,12 @@ export function FiltersScreen({ navigation }) {
                     <Text>{ distance} km</Text>
                 </View>
 
-                <View style={ styles.propertyContainer }>
-                    <FormText title="Tags"/>
-                    <IconButton icon={ faAdd } />
-                </View>
-                <TagChip title={"Tag"} />
+                <FormText title="Tags"/>
+                <TagsPicker selectedTags={ selectedTags } setSelectedTags={ setSelectedTags } />
 
                 <SubmitButton title="Filter" onPress={handleFiltering} />
             </FormView>
-        </View>
+        </ScrollView>
     );
 }
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import { View } from 'react-native';
+import {ScrollView, View} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { FormView, FormText, FormTextInput, SubmitButton } from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
@@ -80,8 +80,8 @@ export function RegisterScreen({ navigation }) {
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.extra_white, }}>
-            <FormView>
+        <ScrollView scrollEnabled={true} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <FormView style={{ marginTop: 40, marginBottom: 40 }}>
 
                 <FormText title="name"/>
                 <FormTextInput
@@ -136,6 +136,6 @@ export function RegisterScreen({ navigation }) {
                 />
 
             </FormView>
-        </View>
+        </ScrollView>
     );
 }

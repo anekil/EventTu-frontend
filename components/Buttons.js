@@ -32,7 +32,7 @@ export const FloatingButton = props => {
 
 export const IconButton = props => {
     return (
-        <Pressable style={{...props.style, width: 40, height: 40,}} onPress = {props.onPress}>
+        <Pressable style={{...props.style, width: 40, height: 40 }} onPress = {props.onPress}>
             <View style={ styles.centerContent }>
                 <FontAwesomeIcon icon={ props.icon } size={ 28 } />
             </View>
@@ -71,12 +71,9 @@ const styles = StyleSheet.create({
     },
 
     headerButton: {
-        backgroundColor: colors.primary_dark,
-        borderRadius: 10,
-        padding: 10,
-        height: 56,
-        margin: 10,
-        marginTop: 30,
+        backgroundColor: colors.extra_black,
+        borderRadius: 40,
+        padding: 6
     },
     headerText: {
         color: colors.extra_white,
