@@ -1,10 +1,10 @@
 import * as React from 'react';
 import axios from 'axios';
-import { View, Text, TextInput, Image, Button, StyleSheet, ScrollView} from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView} from 'react-native';
 import {useEffect, useState} from 'react';
 import { useRoute } from '@react-navigation/native';
 import MultiSelect from 'react-native-multiple-select';
-import MapView, { Marker, Callout, Circle } from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {FormView, FormText, FormTextInput, SubmitButton, FormMultiLineInput} from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
@@ -129,6 +129,10 @@ export function EventDetailsScreen({ navigation }) {
                     selectText="Pick Tags"
                     onSelectedItemsChange={onSelectedItemsChange}
                     displayKey="name"
+                    tagBorderColor={colors.extra_black}
+                    tagTextColor={colors.extra_black}
+                    styleSelectorContainer={ styles.formTextInputLike }
+                    styleDropdownMenuSubsection={ styles.formTextInputLike }
                 />
                 {selectedItems && <Text>Selected: {selectedItems.join(', ')}</Text>}
 
@@ -197,4 +201,9 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 300,
     },
+    formTextInputLike: {
+        borderRadius: 10,
+        padding: 10,
+        backgroundColor: colors.extra_white,
+    }
   });
