@@ -9,7 +9,7 @@ import colors from "../theme/Colors";
 // https://github.com/callstack/react-native-slider
 import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
 import {faClock} from "@fortawesome/free-solid-svg-icons/faClock";
-import {faAdd} from "@fortawesome/free-solid-svg-icons/faAdd";
+import {Checkbox} from "expo-checkbox";
 
 export function FiltersScreen({ navigation }) {
 
@@ -38,6 +38,7 @@ export function FiltersScreen({ navigation }) {
 
     const [distance, setDistance] = React.useState(10);
     const [selectedTags, setSelectedTags] = React.useState([]);
+    const [onlyFavourites, setOnlyFavourites] =  React.useState(false);
 
     const handleFiltering = () => {
 
@@ -57,6 +58,9 @@ export function FiltersScreen({ navigation }) {
                     <IconButton onPress={showTimepicker} icon={ faClock } />
                     <Text>{date.toLocaleTimeString()}</Text>
                 </View>
+                <Text>{
+                    //new Date("10-10-2020 23:23:23").toLocaleString()
+                }</Text>
 
                 {show && (
                     <DateTimePicker
@@ -86,6 +90,16 @@ export function FiltersScreen({ navigation }) {
 
                 <FormText title="Tags"/>
                 <TagsPicker selectedTags={ selectedTags } setSelectedTags={ setSelectedTags } />
+
+                <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                    <FormText title="Only favourites "/>
+                    <Checkbox
+                        style={styles.checkbox}
+                        value={onlyFavourites}
+                        onValueChange={setOnlyFavourites}
+                        color={ colors.extra_black }
+                    />
+                </View>
 
                 <SubmitButton title="Filter" onPress={handleFiltering} />
             </FormView>
