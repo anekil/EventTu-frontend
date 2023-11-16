@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import {FormText, FormView, SubmitButton} from "../components/FormElements";
+import {FormText, FormView, SubmitButton, TagsPicker} from "../components/FormElements";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {IconButton, PrimaryButton, TagChip} from "../components/Buttons";
 // https://github.com/react-native-datetimepicker/datetimepicker
@@ -37,7 +37,7 @@ export function FiltersScreen({ navigation }) {
     };
 
     const [distance, setDistance] = React.useState(10);
-
+    const [selectedTags, setSelectedTags] = React.useState([]);
 
     const handleFiltering = () => {
 
@@ -84,11 +84,8 @@ export function FiltersScreen({ navigation }) {
                     <Text>{ distance} km</Text>
                 </View>
 
-                <View style={ styles.propertyContainer }>
-                    <FormText title="Tags"/>
-                    <IconButton icon={ faAdd } />
-                </View>
-                <TagChip title={"Tag"} />
+                <FormText title="Tags"/>
+                <TagsPicker selectedTags={ selectedTags } setSelectedTags={ setSelectedTags } />
 
                 <SubmitButton title="Filter" onPress={handleFiltering} />
             </FormView>
