@@ -59,7 +59,7 @@ export function LoginScreen({ navigation }) {
     };
 
     return (
-        <ScrollView scrollEnabled={true} style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
+        <ScrollView scrollEnabled={true} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FormView style={{ marginTop: 40, marginBottom: 40 }}>
 
                 <FormText title="Email"/>
@@ -90,9 +90,7 @@ export function LoginScreen({ navigation }) {
                 />
 
             </FormView>
-
             <SubmitButton title="Bypass" onPress={role === Role.ORGANIZER ? () => navigation.navigate('OrganizerEvents') : () => navigation.navigate('Browse Events')} />
-
         </ScrollView>
     );
 }

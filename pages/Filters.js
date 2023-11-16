@@ -44,7 +44,7 @@ export function FiltersScreen({ navigation }) {
     }
 
     return (
-        <ScrollView scrollEnabled={true} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
+        <ScrollView scrollEnabled={true} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FormView style={{ width: '80%', marginTop: 40, marginBottom: 40 }}>
                 <FormText title="Choose filters"/>
 

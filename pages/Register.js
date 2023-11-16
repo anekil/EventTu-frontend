@@ -80,7 +80,7 @@ export function RegisterScreen({ navigation }) {
     };
 
     return (
-        <ScrollView scrollEnabled={true} style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
+        <ScrollView scrollEnabled={true} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FormView style={{ marginTop: 40, marginBottom: 40 }}>
 
                 <FormText title="name"/>
