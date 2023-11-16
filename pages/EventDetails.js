@@ -1,21 +1,25 @@
 import * as React from 'react';
 import axios from 'axios';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView} from 'react-native';
-import { useEffect } from 'react';
+import { View, Text, TextInput, Image, Button, StyleSheet, ScrollView} from 'react-native';
+import {useEffect, useState} from 'react';
 import { useRoute } from '@react-navigation/native';
 import MultiSelect from 'react-native-multiple-select';
 import MapView, { Marker, Callout, Circle } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { FormView, FormText, FormTextInput, SubmitButton } from "../components/FormElements";
+import {FormView, FormText, FormTextInput, SubmitButton, FormMultiLineInput} from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
 import colors from "../theme/Colors";
 import { sendTo } from '../utils/Links';
+import * as ImagePicker from "expo-image-picker";
+import {IconButton} from "../components/Buttons";
+import {faFileImage} from "@fortawesome/free-solid-svg-icons/faFileImage";
 
 export function EventDetailsScreen({ navigation }) {
     const [title, setTitle] = React.useState('');
     const [eventLink, setEventLink] = React.useState('');
     const [tags, setTags] = React.useState([]);
     const [selectedItems, setSelectedItems] = React.useState([]);
+    const [image, setImage] = useState(null);
     const [textValue, setTextValue] = React.useState('');
     const [location, setLocation] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
@@ -57,6 +61,20 @@ export function EventDetailsScreen({ navigation }) {
             });
     }
 
+
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
 
     // Location settings
     useEffect(() => {
@@ -114,17 +132,21 @@ export function EventDetailsScreen({ navigation }) {
                 />
                 {selectedItems && <Text>Selected: {selectedItems.join(', ')}</Text>}
 
+                <FormText title="image"/>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <IconButton icon={ faFileImage } onPress={pickImage} />
+                    {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                </View>
+
                 <FormText title="description"/>
-                <TextInput
-                    style={styles.textArea}
-                    multiline
-                    numberOfLines={4} // You can set the number of lines you want
+                <FormMultiLineInput
                     onChangeText={text => setTextValue(text)}
                     value={textValue}
                     placeholder="Enter your text here"
                 />
 
                 <FormText title="location"/>
+                <Text>Long press to choose</Text>
                 {location ? (
                     <MapView
                         style={styles.map}
@@ -143,7 +165,6 @@ export function EventDetailsScreen({ navigation }) {
                 ) : (
                     <Text>{errorMsg}</Text>
                 )}
-
 
 
                 <SubmitButton title="Add Event" onPress={addEvent} />

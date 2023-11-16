@@ -31,6 +31,21 @@ export const FormTextInput = props => {
     );
 }
 
+export const FormMultiLineInput = props => {
+    return (
+        <TextInput
+            style={styles.textInput}
+            multiline
+            numberOfLines={4}
+            placeholder={props.placeholder}
+            value={props.value}
+            onChangeText={props.onChangeText}
+        >
+            {props.children}
+        </TextInput>
+    );
+}
+
 export const FormLink = props => {
     return (
         <Text style={styles.link} onPress={props.onPress}>{props.title}</Text>
