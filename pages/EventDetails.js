@@ -102,8 +102,8 @@ export function EventDetailsScreen({ navigation }) {
 
 
     return (
-        <ScrollView scrollEnabled={true} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', backgroundColor: colors.extra_white, }}>
-            <FormView style={{ width: '80%' }}>
+        <ScrollView scrollEnabled={true} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
+            <FormView style={{ width: '80%', marginTop: 40, marginBottom: 40 }}>
 
                 <FormText title="title"/>
                 <FormTextInput

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {FormText, FormView, SubmitButton} from "../components/FormElements";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {IconButton, PrimaryButton, TagChip} from "../components/Buttons";
@@ -44,8 +44,8 @@ export function FiltersScreen({ navigation }) {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.extra_white }}>
-            <FormView style={{alignItems: 'center', justifyContent: 'center',}}>
+        <ScrollView scrollEnabled={true} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
+            <FormView style={{ width: '80%', marginTop: 40, marginBottom: 40 }}>
                 <FormText title="Choose filters"/>
 
                 <FormText title="Date"/>
@@ -92,7 +92,7 @@ export function FiltersScreen({ navigation }) {
 
                 <SubmitButton title="Filter" onPress={handleFiltering} />
             </FormView>
-        </View>
+        </ScrollView>
     );
 }
 

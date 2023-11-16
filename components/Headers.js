@@ -15,7 +15,6 @@ export const HeaderAppName = props => {
 export const HeaderAuthorized = props => {
     return (
         <View style={{...styles.headerContainer, ...styles.blackBorder, ...props.style}}>
-
             <HeaderButton title={"Logout"} style={{margin:10}} />
         </View>
     );
@@ -23,7 +22,7 @@ export const HeaderAuthorized = props => {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        flexDirection: "row",
+        //flexDirection: "row",
         backgroundColor: colors.primary_dark,
         marginTop: 40,
         margin: 10,

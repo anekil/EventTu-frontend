@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import { View } from 'react-native';
+import {ScrollView, View} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { FormView, FormText, FormTextInput, FormLink, SubmitButton } from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
@@ -59,8 +59,8 @@ export function LoginScreen({ navigation }) {
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.extra_white, }}>
-            <FormView>
+        <ScrollView scrollEnabled={true} style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
+            <FormView style={{ marginTop: 40, marginBottom: 40 }}>
 
                 <FormText title="Email"/>
                 <FormTextInput 
@@ -93,6 +93,6 @@ export function LoginScreen({ navigation }) {
 
             <SubmitButton title="Bypass" onPress={role === Role.ORGANIZER ? () => navigation.navigate('OrganizerEvents') : () => navigation.navigate('Browse Events')} />
 
-        </View>
+        </ScrollView>
     );
 }
