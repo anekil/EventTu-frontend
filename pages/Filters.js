@@ -14,7 +14,7 @@ import {Checkbox} from "expo-checkbox";
 export function FiltersScreen({ navigation }) {
 
     const [fromDate, setFromDate] = useState(new Date());
-    const [toDate, setToDate] = useState(fromDate.getTime() + 60 * 60 * 1000);
+    const [toDate, setToDate] = useState(fromDate);
     const [distance, setDistance] = React.useState(10);
     const [selectedTags, setSelectedTags] = React.useState([]);
     const [onlyFavourites, setOnlyFavourites] =  React.useState(false);
@@ -27,6 +27,7 @@ export function FiltersScreen({ navigation }) {
             "selectedTags": selectedTags,
             "onlyFavourites": onlyFavourites
         };
+        console.log(filters);
     }
 
     const [minDate, setMinDate] = useState(new Date());
@@ -36,14 +37,20 @@ export function FiltersScreen({ navigation }) {
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
+        if(isFrom){
+            setFromDate(currentDate);
+            if(toDate<fromDate)
+                setToDate(fromDate);
+        }
+        else
+            setToDate(currentDate);
         setShow(false);
-        isFrom ? setFromDate(currentDate) : setToDate(currentDate);
     };
 
     const showMode = (currentMode) => {
-        setShow(true);
         setMode(currentMode);
-        setMinDate(isFrom ? new Date() : fromDate.getTime() + 60 * 60 * 1000);
+        setMinDate(isFrom ? new Date() : fromDate);
+        setShow(true);
     };
 
     const showDatepicker = () => {
