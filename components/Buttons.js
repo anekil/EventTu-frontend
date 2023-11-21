@@ -2,7 +2,9 @@ import {Pressable, StyleSheet, Text, Touchable, View} from "react-native";
 import * as React from "react";
 import colors from "../theme/Colors";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
-import {faMugSaucer} from "@fortawesome/free-solid-svg-icons/faMugSaucer";
+import {useState} from "react";
+import {faStar} from "@fortawesome/free-solid-svg-icons/faStar";
+import {faStar as faFullStar} from "@fortawesome/free-regular-svg-icons/faStar";
 
 export const PrimaryButton = props => {
     return (
@@ -32,9 +34,21 @@ export const FloatingButton = props => {
 
 export const IconButton = props => {
     return (
-        <Pressable style={{...props.style, width: 40, height: 40 }} onPress = {props.onPress}>
+        <Pressable style={{ width: 40, height: 40, ...props.style }} onPress = {props.onPress}>
             <View style={ styles.centerContent }>
                 <FontAwesomeIcon icon={ props.icon } size={ 28 } />
+            </View>
+        </Pressable>
+    );
+}
+
+export const StarButton = props => {
+    const [pressed, setPressed] = useState(false);
+
+    return (
+        <Pressable style={{ width: 50, height: 50, ...props.style }} onPress = { () => setPressed(!pressed) }>
+            <View style={ styles.centerContent }>
+                <FontAwesomeIcon icon={ pressed ? faStar : faFullStar } size={ 50 }  />
             </View>
         </Pressable>
     );
