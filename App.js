@@ -15,7 +15,7 @@ import colors from "./theme/Colors";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faMap} from "@fortawesome/free-solid-svg-icons/faMap";
 import {faList} from "@fortawesome/free-solid-svg-icons/faList";
-import {DetailsScreen} from "./pages/Details";
+import {DetailsScreen, MutableDetailsScreen} from "./pages/Details";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,6 +44,7 @@ export default function App() {
               <Stack.Screen name="Browse Events" component={EventsNavigator} options={{orientation: 'default'}}/>
               <Stack.Screen name="Filters" component={FiltersScreen} options={{orientation: 'default'}}/>
               <Stack.Screen name="Details" component={DetailsScreen} options={{orientation: 'default'}} />
+              <Stack.Screen name="Mutable Details" component={MutableDetailsScreen} options={{orientation: 'default'}} />
               <Stack.Screen name="OrganizerEvents" component={OrganizerEventsScreen} options={{orientation: 'default'}}/>
               <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{orientation: 'default'}}/>
           </Stack.Navigator>
