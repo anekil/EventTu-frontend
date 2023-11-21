@@ -8,7 +8,7 @@ import {Role} from "../utils/RoleEnum";
 
 export function EventMini(props) {
     return (
-        <View style={{ ...styles.eventCard, flex: 1, justifyContent: 'center' }}>
+        <Pressable style={{ ...styles.eventCard, flex: 1, justifyContent: 'center' }} onPress={props.onPress}>
             <View style={{ flexDirection: 'row' }}>
                 <ImageWithStar style={{ width: '50%' }} />
                 { /*role === Role.ORGANIZER
@@ -21,7 +21,7 @@ export function EventMini(props) {
                         <TagChip title="Anime" />
                 </View>
             </View>
-        </View>
+        </Pressable>
     );
 }
 

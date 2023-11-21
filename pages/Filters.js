@@ -28,7 +28,6 @@ export function FiltersScreen({ navigation }) {
             "onlyFavourites": onlyFavourites
         };
         console.log(filters);
-        navigation.navigate('Details');
     }
 
     const [minDate, setMinDate] = useState(new Date());
