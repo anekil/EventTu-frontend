@@ -16,6 +16,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faMap} from "@fortawesome/free-solid-svg-icons/faMap";
 import {faList} from "@fortawesome/free-solid-svg-icons/faList";
 import {DetailsScreen, MutableDetailsScreen} from "./pages/Details";
+import {ProfileScreen} from "./pages/Profile";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -47,6 +48,7 @@ export default function App() {
               <Stack.Screen name="Mutable Details" component={MutableDetailsScreen} options={{orientation: 'default'}} />
               <Stack.Screen name="OrganizerEvents" component={OrganizerEventsScreen} options={{orientation: 'default'}}/>
               <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{orientation: 'default'}}/>
+              <Stack.Screen name="Profile" component={ProfileScreen} options={{orientation: 'default'}}/>
           </Stack.Navigator>
       </NavigationContainer>
   );

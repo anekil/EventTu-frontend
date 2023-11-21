@@ -4,15 +4,16 @@ import {IconButton, PrimaryButton, StarButton, TagChip} from "./Buttons";
 import colors from "../theme/Colors";
 import {faLink} from "@fortawesome/free-solid-svg-icons/faLink";
 import ExampleImage from "../assets/example.png";
+import {Role} from "../utils/RoleEnum";
 
 export function EventMini(props) {
     return (
         <View style={{ ...styles.eventCard, flex: 1, justifyContent: 'center' }}>
             <View style={{ flexDirection: 'row' }}>
                 <ImageWithStar style={{ width: '50%' }} />
-                { /*props.atendee
-                    ? <ImageWithStar style={{ width: '50%' }} />
-                    : <ImageWithoutStar style={{ width: '50%' }} />*/
+                { /*role === Role.ORGANIZER
+                    ? <ImageWithoutStar style={{ width: '50%' }} />
+                    : <ImageWithStar style={{ width: '50%' }} />*/
                 }
                 <View>
                     <PrimaryButton title="Kapitularz" />
