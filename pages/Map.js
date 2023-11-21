@@ -8,6 +8,7 @@ import axios from 'axios';
 import { sendTo } from '../utils/Links';
 import { FloatingButton } from "../components/Buttons"
 import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
+import {HeaderAuthorized} from "../components/Headers";
 
 export const MapScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
@@ -95,7 +96,10 @@ export const MapScreen = ({ navigation }) => {
   
 
   return (
-    <View style={styles.container}>
+    <>
+    <HeaderAuthorized />
+
+      <View style={styles.container}>
 
       {location ? (
         <MapView
@@ -137,6 +141,7 @@ export const MapScreen = ({ navigation }) => {
       <FloatingButton icon={ faFilter } onPress={() => navigation.navigate('Filters')} />
 
     </View>
+    </>
   );
 };
 
