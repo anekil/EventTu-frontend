@@ -2,35 +2,41 @@ import * as React from 'react';
 import {StyleSheet, View, Image, Text, Pressable, ScrollView} from 'react-native';
 import {IconButton, PrimaryButton, StarButton, TagChip} from "./Buttons";
 import colors from "../theme/Colors";
-import {faCircleInfo} from "@fortawesome/free-solid-svg-icons/faCircleInfo";
 import {faLink} from "@fortawesome/free-solid-svg-icons/faLink";
 import ExampleImage from "../assets/example.png";
-import {FormMultiLineInput} from "./FormElements";
 
-export function EventMini() {
+export function EventMini(props) {
     return (
         <View style={{ ...styles.eventCard, flex: 1, justifyContent: 'center' }}>
             <View style={{ flexDirection: 'row' }}>
-                <Image style={ styles.image } source={ ExampleImage } />
+                <ImageWithStar style={{ width: '50%' }} />
+                { /*props.atendee
+                    ? <ImageWithStar style={{ width: '50%' }} />
+                    : <ImageWithoutStar style={{ width: '50%' }} />*/
+                }
                 <View>
-                    <PrimaryButton title="Title" />
-                    <View style={{flexDirection: 'row'}}>
-                        <TagChip title="Tag" />
-                        <TagChip title="Tag" />
-                        <TagChip title="Tag" />
-                    </View>
-                    <IconButton icon={ faCircleInfo } style={{ alignSelf: 'flex-end' }} />
+                    <PrimaryButton title="Kapitularz" />
+                        <TagChip title="Fantastyka" />
+                        <TagChip title="Anime" />
                 </View>
             </View>
         </View>
     );
 }
 
-const ImageWithStar = () => {
+const ImageWithStar = (props) => {
     return (
-        <View style={ styles.imageContainer } >
+        <View style={{ ...styles.imageContainer, ...props.style }} >
             <Image style={ { ...styles.image }} source={ ExampleImage } resizeMode="contain" />
             <StarButton style={styles.star} />
+        </View>
+    );
+};
+
+const ImageWithoutStar = (props) => {
+    return (
+        <View style={{ ...styles.imageContainer, ...props.style }} >
+            <Image style={ { ...styles.image }} source={ ExampleImage } resizeMode="contain" />
         </View>
     );
 };
@@ -70,7 +76,7 @@ export const EventDetails = (props) => {
 const styles = StyleSheet.create({
     eventCard: {
         borderRadius: 20,
-        padding: 20,
+        padding: 12,
         backgroundColor: colors.form_white,
         borderWidth: 2,
         borderColor: colors.extra_black,
@@ -102,6 +108,13 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 'auto',
         aspectRatio: 1,
+        borderWidth: 2,
+        borderColor: colors.extra_black,
+    },
+    miniImage: {
+        borderRadius: 20,
+        width: 120,
+        height: 120,
         borderWidth: 2,
         borderColor: colors.extra_black,
     },

@@ -47,8 +47,9 @@ export const StarButton = props => {
 
     return (
         <Pressable style={{ width: 50, height: 50, ...props.style }} onPress = { () => setPressed(!pressed) }>
-            <View style={ styles.centerContent }>
-                <FontAwesomeIcon icon={ pressed ? faStar : faFullStar } size={ 50 }  />
+            <View style={{ ...styles.centerContent, position: 'relative' }}>
+                <FontAwesomeIcon icon={ faStar } size={ 46 } style={{ zIndex: 1, color: pressed ? colors.secondary : colors.extra_white, position: 'absolute', top: 0, left: 0 }} />
+                <FontAwesomeIcon icon={ faFullStar } size={ 48 } style={{ zIndex: 2, position: 'absolute', top: 0, left: 0 }}/>
             </View>
         </Pressable>
     );
