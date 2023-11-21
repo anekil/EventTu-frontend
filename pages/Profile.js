@@ -16,7 +16,7 @@ export function ProfileScreen({ navigation }) {
                <FormText title="Your email" />
                <FormText title="example@email.com" />
 
-               <PrimaryButton title={"Logout"} style={{backgroundColor: colors.error}} />
+               <PrimaryButton title={"Logout"} style={{backgroundColor: colors.error}} onPress={() => navigation.navigate("Home")} />
            </FormView>
         </View>
         </>

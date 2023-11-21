@@ -12,7 +12,14 @@ export function OrganizerEventsScreen({ navigation }) {
         <>
         <HeaderAuthorized navigation={navigation} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <FlatList data={events} renderItem={ EventMini } />
+            <FlatList data={events}
+                      renderItem={({item}) => (
+                          <EventMini
+                              onPress={() => navigation.navigate('Details')}
+                              title={item.label}
+                          /> )
+                      }
+            />
             <FloatingButton icon={ faPlus } onPress={() => navigation.navigate('EventDetails')} />
         </View>
         </>

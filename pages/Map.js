@@ -97,7 +97,7 @@ export const MapScreen = ({ navigation }) => {
 
   return (
     <>
-    <HeaderAuthorized />
+    <HeaderAuthorized navigation={navigation} />
 
       <View style={styles.container}>
 
