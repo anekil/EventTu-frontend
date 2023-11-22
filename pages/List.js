@@ -10,9 +10,16 @@ export function ListScreen({ navigation }) {
 
     return (
         <>
-        <HeaderAuthorized />
+        <HeaderAuthorized navigation={navigation} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <FlatList data={events} renderItem={ EventMini } />
+            <FlatList data={events}
+                      renderItem={({item}) => (
+                          <EventMini
+                              onPress={() => navigation.navigate('Details')}
+                              title={item.label}
+                          /> )
+                      }
+            />
             <FloatingButton icon={ faFilter } onPress={() => navigation.navigate('Filters')} />
         </View>
         </>

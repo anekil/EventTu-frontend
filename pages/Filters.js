@@ -13,19 +13,44 @@ import {Checkbox} from "expo-checkbox";
 
 export function FiltersScreen({ navigation }) {
 
-    const [date, setDate] = useState(new Date());
+    const [fromDate, setFromDate] = useState(new Date());
+    const [toDate, setToDate] = useState(fromDate);
+    const [distance, setDistance] = React.useState(10);
+    const [selectedTags, setSelectedTags] = React.useState([]);
+    const [onlyFavourites, setOnlyFavourites] =  React.useState(false);
+
+    const handleFiltering = () => {
+        const filters = {
+            "fromDate": fromDate.toLocaleString(),
+            "toDate": toDate.toLocaleString(),
+            "distance": distance,
+            "selectedTags": selectedTags,
+            "onlyFavourites": onlyFavourites
+        };
+        console.log(filters);
+    }
+
+    const [minDate, setMinDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const [isFrom, setIsFrom] = useState(true)
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
+        if(isFrom){
+            setFromDate(currentDate);
+            if(toDate<fromDate)
+                setToDate(fromDate);
+        }
+        else
+            setToDate(currentDate);
         setShow(false);
-        setDate(currentDate);
     };
 
     const showMode = (currentMode) => {
-        setShow(true);
         setMode(currentMode);
+        setMinDate(isFrom ? new Date() : fromDate);
+        setShow(true);
     };
 
     const showDatepicker = () => {
@@ -36,13 +61,6 @@ export function FiltersScreen({ navigation }) {
         showMode('time');
     };
 
-    const [distance, setDistance] = React.useState(10);
-    const [selectedTags, setSelectedTags] = React.useState([]);
-    const [onlyFavourites, setOnlyFavourites] =  React.useState(false);
-
-    const handleFiltering = () => {
-
-    }
 
     return (
         <ScrollView scrollEnabled={true} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -50,25 +68,47 @@ export function FiltersScreen({ navigation }) {
                 <FormText title="Choose filters"/>
 
                 <FormText title="Date"/>
-                <View style={ styles.propertyContainer }>
-                    <IconButton onPress={showDatepicker} icon={ faCalendar } />
-                    <Text>{date.toLocaleDateString()}</Text>
+                <View style={{flexDirection:"column"}}>
+                    <FormText title="From"/>
+                    <View style={ styles.propertyContainer }>
+                        <IconButton icon={ faClock }
+                                    onPress={()=>{
+                                        setIsFrom(true);
+                                        showTimepicker();
+                                    }}  />
+                        <Text>{fromDate.toLocaleTimeString()}</Text>
+                        <IconButton icon={ faCalendar }
+                                    onPress={()=>{
+                                        setIsFrom(true);
+                                        showDatepicker();
+                                    }}  />
+                        <Text>{fromDate.toLocaleDateString()}</Text>
+                    </View>
+                    <FormText title="To"/>
+                    <View style={ styles.propertyContainer }>
+                        <IconButton icon={ faClock }
+                                    onPress={()=>{
+                                        setIsFrom(false);
+                                        showTimepicker();
+                                    }}  />
+                        <Text>{toDate.toLocaleTimeString()}</Text>
+                        <IconButton icon={ faCalendar }
+                                    onPress={()=>{
+                                        setIsFrom(false);
+                                        showDatepicker();
+                                    }}  />
+                        <Text>{toDate.toLocaleDateString()}</Text>
+                    </View>
                 </View>
-                <View style={ styles.propertyContainer }>
-                    <IconButton onPress={showTimepicker} icon={ faClock } />
-                    <Text>{date.toLocaleTimeString()}</Text>
-                </View>
-                <Text>{
-                    //new Date("10-10-2020 23:23:23").toLocaleString()
-                }</Text>
 
                 {show && (
                     <DateTimePicker
                         testID="dateTimePicker"
-                        value={date}
+                        value={isFrom ? fromDate : toDate}
                         mode={mode}
                         is24Hour={true}
                         onChange={onChange}
+                        minimumDate={minDate}
                     />
                 )}
 

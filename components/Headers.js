@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View} from "react-native";
 import * as React from "react";
 import colors from "../theme/Colors";
-import {HeaderButton} from "./Buttons";
+import {HeaderButton, IconButton} from "./Buttons";
+import {faUser} from "@fortawesome/free-solid-svg-icons/faUser";
 
 
 export const HeaderAppName = props => {
@@ -16,17 +17,19 @@ export const HeaderAuthorized = props => {
     return (
         <View style={{...styles.headerContainer, ...styles.blackBorder, ...props.style}}>
             <HeaderButton title={"Logout"} style={{margin:10}} />
+            <IconButton icon={ faUser} style={{ alignSelf: 'center', marginEnd: 30 }} onPress={() => props.navigation.navigate('Profile')} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     headerContainer: {
-        //flexDirection: "row",
+        justifyContent: "space-between",
+        flexDirection: "row",
         backgroundColor: colors.primary_dark,
         marginTop: 40,
         margin: 10,
-        borderRadius: 20,
+        borderRadius: 20
     },
     headerText: {
         textAlign: "center",
