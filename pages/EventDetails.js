@@ -20,6 +20,8 @@ import { sendTo } from '../utils/Links';
 import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "../components/Buttons";
 import {faFileImage} from "@fortawesome/free-solid-svg-icons/faFileImage";
+import { Container } from "../utils/ContainerEnum";
+import { saveUserData, getUserData } from "../utils/Storage";
 
 export function EventDetailsScreen({ navigation }) {
     const [title, setTitle] = React.useState('');
@@ -30,6 +32,24 @@ export function EventDetailsScreen({ navigation }) {
     const [location, setLocation] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
     const [pin, setPin] = React.useState(null);
+    const [activeOwnerEvent, setActiveOwnerEvent] = React.useState(null);
+
+    // Loading user data
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const data = await getUserData(Container.OWNER_ACTIVE_EVENT);
+                setActiveOwnerEvent(JSON.parse(data));
+                updatePin();
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        })();
+    }, []);
+    // show loading if user data not ready
+    if (!setActiveOwnerEvent) { return <ActivityIndicator size="large" color={colors.primary} />; }
+
+    console.log("active event: " + JSON.stringify(activeOwnerEvent));
 
     // add event handler
     const addEvent = () => {
@@ -81,8 +101,18 @@ export function EventDetailsScreen({ navigation }) {
     }, []);
 
     const handleLongPress = (event) => {
+        console.log(event.nativeEvent.coordinate);
         setPin(event.nativeEvent.coordinate);
+        activeOwnerEvent.latitude = event.nativeEvent.coordinate.latitude;
+        activeOwnerEvent.longitude = event.nativeEvent.coordinate.longitude;
     };
+
+    function updatePin(){
+        console.log(activeOwnerEvent);
+        console.log(activeOwnerEvent.latitude);
+        console.log(activeOwnerEvent.longitude);
+        setPin({"latitude": activeOwnerEvent.latitude, "longitude": activeOwnerEvent.longitude});
+    }
 
 
     return (
@@ -91,7 +121,7 @@ export function EventDetailsScreen({ navigation }) {
 
                 <FormText title="Title"/>
                 <FormTextInput
-                    placeholder="Enter Title"
+                    placeholder={!activeOwnerEvent ? "Enter Title" : activeOwnerEvent.name}
                     secureTextEntry={false}
                     value={title} 
                     onChangeText={text => setTitle(text)}
@@ -118,7 +148,7 @@ export function EventDetailsScreen({ navigation }) {
                 <FormMultiLineInput
                     onChangeText={text => setTextValue(text)}
                     value={textValue}
-                    placeholder="Enter your text here"
+                    placeholder={!activeOwnerEvent ? "Enter your text here" : activeOwnerEvent.description}
                 />
 
                 <FormText title="Location"/>

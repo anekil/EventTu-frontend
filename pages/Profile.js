@@ -31,6 +31,8 @@ export function ProfileScreen({ navigation }) {
     function resetStack() {
         saveUserData(Container.LOGIN, null);
         saveUserData(Container.ROLE, null);
+        saveUserData(Container.OWNER_EVENTS, null);
+        saveUserData(Container.OWNER_ACTIVE_EVENT, null);
 
         axios.post(sendTo("auth/logout"), {})
           .then(response => {
