@@ -7,15 +7,22 @@ import { InfoPopup } from '../components/InfoModal';
 import colors from "../theme/Colors";
 import { sendTo } from '../utils/Links';
 import { Role } from "../utils/RoleEnum";
+import {saveUserCredentials} from "../utils/Storage";
 
 export function LoginScreen({ navigation }) {
-    console.log("here");
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isFailurePopupVisible, setFailurePopupVisible] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(false);
 
     const { role } = useRoute().params;
+    // TODO: Will be deleted when connection between front and back will work
+    const dummyUserCreds = {
+        "id": 0,
+        "name": "Janusz_" + String(Math.random()),
+        "email": "Janusz@gmail.com",
+        "telephone": "123456789"
+    };
 
     const validateLogin = (email, password) => {
         if(!email || !password){
@@ -43,7 +50,8 @@ export function LoginScreen({ navigation }) {
               })
               .then(response => {
                   console.log(response)
-                  navigation.navigate('Map');
+                  saveUserCredentials(response.data);
+                  role === Role.ORGANIZER ? navigation.navigate('OrganizerEvents') : navigation.navigate('Browse Events');
               })
               .catch(error => {
                   console.log(error)
@@ -57,6 +65,11 @@ export function LoginScreen({ navigation }) {
     const closeFailurePopup = () => {
         setFailurePopupVisible(false);
     };
+
+    function redirect(){
+        saveUserCredentials(dummyUserCreds);
+        role === Role.ORGANIZER ? navigation.navigate('OrganizerEvents') : navigation.navigate('Browse Events');
+    }
 
     return (
         <ScrollView scrollEnabled={true} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -90,7 +103,7 @@ export function LoginScreen({ navigation }) {
                 />
 
             </FormView>
-            <SubmitButton title="Bypass" onPress={role === Role.ORGANIZER ? () => navigation.navigate('OrganizerEvents') : () => navigation.navigate('Browse Events')} />
+            <SubmitButton title="Bypass" onPress={redirect} />
         </ScrollView>
     );
 }
