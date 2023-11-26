@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
+import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
 import { FormText, FormView } from "../components/FormElements";
 import { PrimaryButton } from "../components/Buttons";
@@ -7,6 +8,7 @@ import colors from "../theme/Colors";
 import { HeaderAppName } from "../components/Headers";
 import { saveUserData, getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
+import { sendTo } from '../utils/Links';
 
 export function ProfileScreen({ navigation }) {
     const [userLogin, setUserLogin] = React.useState(null);
@@ -29,6 +31,15 @@ export function ProfileScreen({ navigation }) {
     function resetStack() {
         saveUserData(Container.LOGIN, null);
         saveUserData(Container.ROLE, null);
+
+        axios.post(sendTo("auth/logout"), {})
+          .then(response => {
+              console.log(response)
+          })
+          .catch(error => {
+              console.log(error)
+          });
+
         navigation.dispatch(
             CommonActions.reset({
                 index: 0,
