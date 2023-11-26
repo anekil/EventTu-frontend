@@ -90,7 +90,7 @@ export const TagsPicker = props => {
     return (
       <>
           <MultiSelect
-              uniqueKey="id"
+              uniqueKey="name"
               items={tags}
               selectedItems={props.selectedTags}
               selectText="Pick Tags"

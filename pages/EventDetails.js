@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import { View, Text, Image, StyleSheet, ScrollView} from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
 import {useEffect, useState} from 'react';
 import { useRoute } from '@react-navigation/native';
 import MultiSelect from 'react-native-multiple-select';
@@ -39,49 +39,22 @@ export function EventDetailsScreen({ navigation }) {
         (async () => {
             try {
                 const data = await getUserData(Container.OWNER_ACTIVE_EVENT);
-                setActiveOwnerEvent(JSON.parse(data));
-                updatePin();
+                const parsedData = JSON.parse(data);
+                if(parsedData){
+                    setPin({"latitude": parsedData.latitude, "longitude": parsedData.longitude});
+                    setSelectedTags(parsedData.tags);
+                    setTitle(parsedData.name);
+                    setTextValue(parsedData.description);
+                }
+                setActiveOwnerEvent(parsedData);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         })();
-    }, []);
-    // show loading if user data not ready
-    if (!setActiveOwnerEvent) { return <ActivityIndicator size="large" color={colors.primary} />; }
-
-    console.log("active event: " + JSON.stringify(activeOwnerEvent));
-
-    // add event handler
-    const addEvent = () => {
-        console.log(sendTo(`tags`));
-        axios.get(sendTo(`tags`))
-            .then(response => {
-                setTags(response);
-            })
-            .catch(error => {
-                console.log(error)
-                setTags(dummyTags);
-                console.log(tags);
-            });
-    }
-
-
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
-        }
-    };
+    },[]);
 
     // Location settings
-    useEffect(() => {
+    React.useEffect(() => {
         (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
@@ -99,6 +72,25 @@ export function EventDetailsScreen({ navigation }) {
         console.log(location);
         })();
     }, []);
+    // show loading if user data not ready
+    if (activeOwnerEvent === null || location === null) { return <ActivityIndicator size="large" color={colors.primary} />; }
+
+    console.log("active event: " + JSON.stringify(activeOwnerEvent));
+    console.log("type of active event: " + JSON.stringify(typeof activeOwnerEvent));
+
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
 
     const handleLongPress = (event) => {
         console.log(event.nativeEvent.coordinate);
@@ -107,11 +99,17 @@ export function EventDetailsScreen({ navigation }) {
         activeOwnerEvent.longitude = event.nativeEvent.coordinate.longitude;
     };
 
-    function updatePin(){
-        console.log(activeOwnerEvent);
-        console.log(activeOwnerEvent.latitude);
-        console.log(activeOwnerEvent.longitude);
-        setPin({"latitude": activeOwnerEvent.latitude, "longitude": activeOwnerEvent.longitude});
+
+    function createEvent(){
+
+    }
+
+    function updateEvent(){
+
+    }
+
+    function deleteEvent(){
+
     }
 
 
@@ -121,7 +119,7 @@ export function EventDetailsScreen({ navigation }) {
 
                 <FormText title="Title"/>
                 <FormTextInput
-                    placeholder={!activeOwnerEvent ? "Enter Title" : activeOwnerEvent.name}
+                    placeholder={"Enter Title"}
                     secureTextEntry={false}
                     value={title} 
                     onChangeText={text => setTitle(text)}
@@ -148,7 +146,7 @@ export function EventDetailsScreen({ navigation }) {
                 <FormMultiLineInput
                     onChangeText={text => setTextValue(text)}
                     value={textValue}
-                    placeholder={!activeOwnerEvent ? "Enter your text here" : activeOwnerEvent.description}
+                    placeholder={"Enter your text here"}
                 />
 
                 <FormText title="Location"/>
@@ -172,8 +170,19 @@ export function EventDetailsScreen({ navigation }) {
                     <Text>{errorMsg}</Text>
                 )}
 
-
-                <SubmitButton title="Add Event" onPress={addEvent} />
+                <View style={styles.buttonContainer}>
+                    {!activeOwnerEvent && (
+                        <>
+                            <SubmitButton title="Add Event" onPress={createEvent} />
+                        </>
+                    )}
+                    {activeOwnerEvent && (
+                        <>
+                            <SubmitButton title="Update Event" onPress={updateEvent} />
+                            <SubmitButton title="Delete Event" onPress={deleteEvent} />
+                        </>
+                    )}
+                </View>
 
             </FormView>
         </ScrollView>
@@ -181,6 +190,11 @@ export function EventDetailsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    buttonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
     container: {
       flex: 1,
       justifyContent: 'center',

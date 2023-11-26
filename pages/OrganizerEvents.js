@@ -36,10 +36,6 @@ export function OrganizerEventsScreen({ navigation }) {
     // show loading if user data not ready
     if (!ownerEvents) { return <ActivityIndicator size="large" color={colors.primary} />; }
 
-    function createEvent(){
-
-    }
-
     function readEvents(){
       axios.get(sendTo("events/owner"))
       .then(response => {
@@ -55,20 +51,15 @@ export function OrganizerEventsScreen({ navigation }) {
       });
     }
 
-    function updateEvent(){
-
-    }
-
-    function deleteEvent(){
-
-    }
-
     function onOwnerEventPress(eventId){
-      saveUserData(Container.OWNER_ACTIVE_EVENT, ownerEvents.find(event => event.id === eventId))
+      if(eventId){
+        saveUserData(Container.OWNER_ACTIVE_EVENT, ownerEvents.find(event => event.id === eventId));
+      }
+      else{
+        saveUserData(Container.OWNER_ACTIVE_EVENT, "");
+      }
       navigation.navigate('EventDetails')
     }
-
-    console.log(typeof ownerEvents);
 
     return (
         <>
@@ -82,7 +73,7 @@ export function OrganizerEventsScreen({ navigation }) {
                           /> )
                       }
             />
-            <FloatingButton icon={ faPlus } onPress={() => navigation.navigate('EventDetails')} />
+            <FloatingButton icon={ faPlus } onPress={() => onOwnerEventPress(null)} />
         </View>
         </>
     );
