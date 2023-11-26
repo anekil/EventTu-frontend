@@ -9,7 +9,6 @@ import { saveUserCredentials, getUserCredentials } from "../utils/Storage";
 
 export function ProfileScreen({ navigation }) {
     const [userCreds, setUserCreds] = React.useState(null);
-    const [isLoading, setIsLoading] = React.useState(true); // Loading state
 
     // Loading user credentials
     React.useEffect(() => {
@@ -20,7 +19,6 @@ export function ProfileScreen({ navigation }) {
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
-            setIsLoading(false);
         };
         fetchUserCredentials();
     }, []);
@@ -37,7 +35,7 @@ export function ProfileScreen({ navigation }) {
     }
 
     // show loading if user data not ready
-    if (isLoading) { return <ActivityIndicator size="large" color={colors.primary} />; }
+    if (!userCreds) { return <ActivityIndicator size="large" color={colors.primary} />; }
 
     return (
         <>
