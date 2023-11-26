@@ -31,6 +31,8 @@ export function EventDetailsScreen({ navigation }) {
     const [textValue, setTextValue] = React.useState('');
     const [location, setLocation] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
+    const [isFailurePopupVisible, setFailurePopupVisible] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(false);
     const [pin, setPin] = React.useState(null);
     const [activeOwnerEvent, setActiveOwnerEvent] = React.useState(null);
 
@@ -95,23 +97,65 @@ export function EventDetailsScreen({ navigation }) {
     const handleLongPress = (event) => {
         console.log(event.nativeEvent.coordinate);
         setPin(event.nativeEvent.coordinate);
-        activeOwnerEvent.latitude = event.nativeEvent.coordinate.latitude;
-        activeOwnerEvent.longitude = event.nativeEvent.coordinate.longitude;
     };
 
 
-    function createEvent(){
-
+    function validateEvent(){
+        if(!title){ return { isOk: false, msg: "Title is required" }; }
+        else if(selectedTags.length === 0) { return { isOk: false, msg: "Tags are required" }; }
+        else if(!textValue){ return { isOk: false, msg: "Description is required" }; }
+        else if(!pin || !pin.latitude || !pin.longitude){ return { isOk: false, msg: "Location is required" }; }
+        return { isOk: true, msg: "Registration is valid" };
     }
 
-    function updateEvent(){
+    function prepareEventRequest(){
+        return {
+            "name": title,
+            "free": true,
+            "description": textValue,
+            "owner": activeOwnerEvent.owner,
+            "latitude": pin.latitude,
+            "longitude": pin.longitude,
+            "tags": selectedTags
+        };
+    }
 
+    function handleEvent(isUpdate){
+        const { isOk, msg } = validateEvent();
+        if(!isOk){
+            setErrorMessage(msg)
+            setFailurePopupVisible(true);
+        }
+        else{
+            const request = prepareEventRequest();
+            (isUpdate === true ? axios.put(sendTo(`events/${activeOwnerEvent.id}`), request) : axios.post(sendTo("events"), request))
+              .then(response => {
+                  console.log(response)
+                  navigation.navigate('OrganizerEvents');
+              })
+              .catch(error => {
+                  console.log(error)
+                  navigation.navigate('OrganizerEvents');
+              });
+        }
     }
 
     function deleteEvent(){
-
+        axios.delete(sendTo(`events/${activeOwnerEvent.id}`))
+        .then(response => {
+            console.log(response);
+            navigation.navigate('OrganizerEvents');
+        })
+        .catch(error => {
+            console.log(error);
+            navigation.navigate('OrganizerEvents');
+        });
     }
 
+
+    const closeFailurePopup = () => {
+        setFailurePopupVisible(false);
+    };
 
     return (
         <ScrollView scrollEnabled={true} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -173,16 +217,22 @@ export function EventDetailsScreen({ navigation }) {
                 <View style={styles.buttonContainer}>
                     {!activeOwnerEvent && (
                         <>
-                            <SubmitButton title="Add Event" onPress={createEvent} />
+                            <SubmitButton title="Add Event" onPress={() => handleEvent(false)} />
                         </>
                     )}
                     {activeOwnerEvent && (
                         <>
-                            <SubmitButton title="Update Event" onPress={updateEvent} />
+                            <SubmitButton title="Update Event" onPress={() => handleEvent(true)} />
                             <SubmitButton title="Delete Event" onPress={deleteEvent} />
                         </>
                     )}
                 </View>
+
+                <InfoPopup
+                    isVisible={isFailurePopupVisible}
+                    onClose={closeFailurePopup}
+                    info={errorMessage}
+                />
 
             </FormView>
         </ScrollView>

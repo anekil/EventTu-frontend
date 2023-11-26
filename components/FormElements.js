@@ -65,10 +65,18 @@ export const SubmitButton = props => {
 }
 
 export const TagsPicker = props => {
-    const dummyTags = [{"id":1,"name":"tag1"},{"id":2,"name":"tag2"},{"id":3,"name":"tag3"},{"id":4,"name":"tag4"},{"id":5,"name":"tag5"},{"id":6,"name":"tag6"},{"id":7,"name":"tag7"},{"id":8,"name":"tag8"},{"id":9,"name":"tag9"},{"id":10,"name":"tag10"}]
+    const dummyAvailTags = [{"id":1,"name":"tag1"},{"id":2,"name":"tag2"},{"id":3,"name":"tag3"},{"id":4,"name":"tag4"},{"id":5,"name":"tag5"},{"id":6,"name":"tag6"},{"id":7,"name":"tag7"},{"id":8,"name":"tag8"},{"id":9,"name":"tag9"},{"id":10,"name":"tag10"}]
     const [tags, setTags] = React.useState([]);
 
-    useEffect(() => { getTags(); }, []);
+    const tagIdMap = dummyAvailTags.reduce((acc, tag) => {
+        acc[tag.name] = tag.id;
+        return acc;
+    }, {});
+
+    useEffect(() => { 
+        getTags();
+        props.setSelectedTags(props.selectedTags.map(tagName => tagIdMap[tagName]))
+     }, []);
 
     const getTags = () => {
         console.log(sendTo(`tags`));
@@ -78,19 +86,20 @@ export const TagsPicker = props => {
             })
             .catch(error => {
                 console.log(error)
-                setTags(dummyTags);
+                setTags(dummyAvailTags);
                 console.log(tags);
             });
     }
 
     const onSelectedItemsChange = (selectedItems) => {
+        console.log(selectedItems);
         props.setSelectedTags(selectedItems);
     };
 
     return (
       <>
           <MultiSelect
-              uniqueKey="name"
+              uniqueKey="id"
               items={tags}
               selectedItems={props.selectedTags}
               selectText="Pick Tags"

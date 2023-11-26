@@ -18,16 +18,7 @@ export function OrganizerEventsScreen({ navigation }) {
     React.useEffect(() => {
       (async () => {
           try {
-              const data = await getUserData(Container.OWNER_EVENTS);
-              console.log(data);
-              if(data === "null"){
-                console.log("read from DB");
-                readEvents();
-              }
-              else {
-                console.log("read from storage");
-                setOwnerEvents(JSON.parse(JSON.parse(data)));  // double parsing
-              }
+              readEvents();
           } catch (error) {
               console.error('Error fetching user data:', error);
           }
