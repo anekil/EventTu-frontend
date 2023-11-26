@@ -82,7 +82,8 @@ export const TagsPicker = props => {
         console.log(sendTo(`tags`));
         axios.get(sendTo(`tags`))
             .then(response => {
-                setTags(response);
+                console.log(response.data);
+                setTags(response.data);
             })
             .catch(error => {
                 console.log(error)

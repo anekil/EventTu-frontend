@@ -114,6 +114,8 @@ export function LoginScreen({ navigation }) {
                     isVisible={isFailurePopupVisible}
                     onClose={closeFailurePopup}
                     info={errorMessage}
+                    iconType="times-circle"
+                    iconColor="red"
                 />
 
             </FormView>

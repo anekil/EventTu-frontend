@@ -32,7 +32,9 @@ export function EventDetailsScreen({ navigation }) {
     const [location, setLocation] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
     const [isFailurePopupVisible, setFailurePopupVisible] = React.useState(false);
+    const [isSuccessPopupVisible, setSuccessPopupVisible] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(false);
+    const [successMessage, setSuccessMessage] = React.useState('');
     const [pin, setPin] = React.useState(null);
     const [activeOwnerEvent, setActiveOwnerEvent] = React.useState(null);
 
@@ -131,11 +133,13 @@ export function EventDetailsScreen({ navigation }) {
             (isUpdate === true ? axios.put(sendTo(`events/${activeOwnerEvent.id}`), request) : axios.post(sendTo("events"), request))
               .then(response => {
                   console.log(response)
-                  navigation.navigate('OrganizerEvents');
+                  setSuccessMessage("Success");
+                  setSuccessPopupVisible(true);
               })
               .catch(error => {
                   console.log(error)
-                  navigation.navigate('OrganizerEvents');
+                  setErrorMessage(String(error));
+                  setFailurePopupVisible(true);
               });
         }
     }
@@ -144,17 +148,24 @@ export function EventDetailsScreen({ navigation }) {
         axios.delete(sendTo(`events/${activeOwnerEvent.id}`))
         .then(response => {
             console.log(response);
-            navigation.navigate('OrganizerEvents');
+            setSuccessMessage("Event was successfully deleted");
+            setSuccessPopupVisible(true);
         })
         .catch(error => {
             console.log(error);
-            navigation.navigate('OrganizerEvents');
+            setErrorMessage(String(error));
+            setFailurePopupVisible(true);
         });
     }
 
 
     const closeFailurePopup = () => {
         setFailurePopupVisible(false);
+    };
+
+    const closeSuccessPopup = () => {
+        setSuccessPopupVisible(false);
+        navigation.navigate('OrganizerEvents');
     };
 
     return (
@@ -232,6 +243,16 @@ export function EventDetailsScreen({ navigation }) {
                     isVisible={isFailurePopupVisible}
                     onClose={closeFailurePopup}
                     info={errorMessage}
+                    iconType="times-circle"
+                    iconColor="red"
+                />
+
+                <InfoPopup
+                    isVisible={isSuccessPopupVisible}
+                    onClose={closeSuccessPopup}
+                    info={successMessage}
+                    iconType="check-circle"
+                    iconColor="green"
                 />
 
             </FormView>
