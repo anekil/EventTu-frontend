@@ -1,19 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export async function saveUserCredentials(userCreds) {
+export async function saveUserData(dataContainer, userData) {
     try {
-        console.log("Saved user creds: " + JSON.stringify(userCreds));
-        await AsyncStorage.setItem('@user_creds', JSON.stringify(userCreds));
+        console.log("Saved user data: " + JSON.stringify(userData));
+        await AsyncStorage.setItem(dataContainer, JSON.stringify(userData));
     } catch (e) {
         console.log(e);
     }
 }
 
-export async function getUserCredentials() {
+export async function getUserData(dataContainer) {
     try {
-        const value = await AsyncStorage.getItem('@user_creds');
+        const value = await AsyncStorage.getItem(dataContainer);
         if (value !== null) {
-            console.log("Got user creds: " + value);
+            console.log("Got user data: " + value);
             return value;
         }
         return null;

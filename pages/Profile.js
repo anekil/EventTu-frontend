@@ -1,31 +1,34 @@
 import * as React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native'; // Import ActivityIndicator for loading indication
+import { View, Text, ActivityIndicator } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { FormText, FormView } from "../components/FormElements";
 import { PrimaryButton } from "../components/Buttons";
 import colors from "../theme/Colors";
 import { HeaderAppName } from "../components/Headers";
-import { saveUserCredentials, getUserCredentials } from "../utils/Storage";
+import { saveUserData, getUserData } from "../utils/Storage";
+import { Container } from "../utils/ContainerEnum";
 
 export function ProfileScreen({ navigation }) {
-    const [userCreds, setUserCreds] = React.useState(null);
+    const [userLogin, setUserLogin] = React.useState(null);
 
-    // Loading user credentials
+    // Loading user data
     React.useEffect(() => {
-        const fetchUserCredentials = async () => {
+        (async () => {
             try {
-                const creds = await getUserCredentials();
-                setUserCreds(JSON.parse(creds));
+                const data = await getUserData(Container.LOGIN);
+                setUserLogin(JSON.parse(data));
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
-        };
-        fetchUserCredentials();
+        })();
     }, []);
+    // show loading if user data not ready
+    if (!userLogin) { return <ActivityIndicator size="large" color={colors.primary} />; }
 
     // reset user data and stack
     function resetStack() {
-        saveUserCredentials(null);
+        saveUserData(Container.LOGIN, null);
+        saveUserData(Container.ROLE, null);
         navigation.dispatch(
             CommonActions.reset({
                 index: 0,
@@ -34,21 +37,14 @@ export function ProfileScreen({ navigation }) {
         );
     }
 
-    // show loading if user data not ready
-    if (!userCreds) { return <ActivityIndicator size="large" color={colors.primary} />; }
-
     return (
         <>
             <HeaderAppName />
             <View style={{ marginTop: 40, alignItems: 'center', justifyContent: 'center' }}>
                 <FormView>
                     <FormText title="Your profile" />
-                    {userCreds && (
-                        <>
-                            <FormText title={userCreds.name} />
-                            <FormText title={userCreds.email} />
-                        </>
-                    )}
+                    <FormText title={userLogin.name} />
+                    <FormText title={userLogin.email} />
                     <PrimaryButton title={"Logout"} style={{ backgroundColor: colors.error }} onPress={resetStack} />
                 </FormView>
             </View>
