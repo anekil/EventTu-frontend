@@ -4,7 +4,7 @@ import {FlatList, View, ActivityIndicator } from 'react-native';
 import { FloatingButton } from "../components/Buttons"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {HeaderAuthorized} from "../components/Headers";
-import {EventMini} from "../components/Event";
+import {EventMini} from "../components/Events";
 import ownerEventsExample from "../examples/ownerEventsExample.json";  // example content of events
 import { saveUserData, getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
