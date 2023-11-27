@@ -37,20 +37,24 @@ export function EventDetailsScreen({ navigation }) {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [pin, setPin] = React.useState(null);
     const [activeOwnerEvent, setActiveOwnerEvent] = React.useState(null);
+    const [userData, setUserData] = React.useState(null);
 
     // Loading user data
     React.useEffect(() => {
         (async () => {
             try {
                 const data = await getUserData(Container.OWNER_ACTIVE_EVENT);
+                const data2 = await getUserData(Container.LOGIN);
                 const parsedData = JSON.parse(data);
-                if(parsedData){
+                const parsedUserData = JSON.parse(data2);
+                if(parsedData && parsedUserData){
                     setPin({"latitude": parsedData.latitude, "longitude": parsedData.longitude});
                     setSelectedTags(parsedData.tags);
                     setTitle(parsedData.name);
                     setTextValue(parsedData.description);
                 }
                 setActiveOwnerEvent(parsedData);
+                setUserData(parsedUserData);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -115,10 +119,12 @@ export function EventDetailsScreen({ navigation }) {
             "name": title,
             "free": true,
             "description": textValue,
-            "owner": activeOwnerEvent.owner,
+            "owner": userData.id,
             "latitude": pin.latitude,
             "longitude": pin.longitude,
-            "tags": selectedTags
+            "tags": selectedTags,
+            "startTime": "2023-11-27 20:30:25",
+            "endTime": "2023-11-27 21:53:25",
         };
     }
 
@@ -130,6 +136,7 @@ export function EventDetailsScreen({ navigation }) {
         }
         else{
             const request = prepareEventRequest();
+            console.log(request);
             (isUpdate === true ? axios.put(sendTo(`events/${activeOwnerEvent.id}`), request) : axios.post(sendTo("events"), request))
               .then(response => {
                   console.log(response)
