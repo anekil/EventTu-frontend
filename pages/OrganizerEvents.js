@@ -30,9 +30,9 @@ export function OrganizerEventsScreen({ navigation }) {
     function readEvents(){
       axios.get(sendTo("events/owner"))
       .then(response => {
-          console.log(response);
-          saveUserData(Container.OWNER_EVENTS, JSON.stringify(response));
-          setOwnerEvents(response);
+          console.log(response.data);
+          saveUserData(Container.OWNER_EVENTS, JSON.stringify(response.data));
+          setOwnerEvents(response.data);
       })
       .catch(error => {
           console.log(error);
