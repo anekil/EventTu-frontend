@@ -139,7 +139,7 @@ export function EventDetailsScreen({ navigation }) {
             console.log(request);
             (isUpdate === true ? axios.put(sendTo(`events/${activeOwnerEvent.id}`), request) : axios.post(sendTo("events"), request))
               .then(response => {
-                  console.log(response)
+                  console.log(response.data)
                   setSuccessMessage("Success");
                   setSuccessPopupVisible(true);
               })
@@ -154,7 +154,7 @@ export function EventDetailsScreen({ navigation }) {
     function deleteEvent(){
         axios.delete(sendTo(`events/${activeOwnerEvent.id}`))
         .then(response => {
-            console.log(response);
+            console.log(response.data);
             setSuccessMessage("Event was successfully deleted");
             setSuccessPopupVisible(true);
         })

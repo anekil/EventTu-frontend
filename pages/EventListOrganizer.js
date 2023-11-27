@@ -10,20 +10,25 @@ import { saveUserData, getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import { sendTo } from '../utils/Links';
 import colors from "../theme/Colors";
+import { useIsFocused } from '@react-navigation/native';
 
 export function OrganizerEventsScreen({ navigation }) {
     const [ownerEvents, setOwnerEvents] = React.useState(null);
+    const isFocused = useIsFocused();
 
     // Loading user data
     React.useEffect(() => {
       (async () => {
-          try {
-              readEvents();
-          } catch (error) {
-              console.error('Error fetching user data:', error);
+          if(isFocused){
+            try {
+              console.log("here");
+                readEvents();
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
           }
       })();
-    }, []);
+    }, [isFocused]);
     // show loading if user data not ready
     if (!ownerEvents) { return <ActivityIndicator size="large" color={colors.primary} />; }
 
