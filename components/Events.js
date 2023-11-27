@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, View, Image, Text, Pressable, ScrollView} from 'react-native';
+import {StyleSheet, View, Image, Text, Pressable, ScrollView, FlatList} from 'react-native';
 import {IconButton, PrimaryButton, StarButton, TagChip} from "./Buttons";
 import colors from "../theme/Colors";
 import {faLink} from "@fortawesome/free-solid-svg-icons/faLink";
@@ -16,9 +16,12 @@ export function EventMini(props) {
                     : <ImageWithStar style={{ width: '50%' }} />*/
                 }
                 <View>
-                    <PrimaryButton title="Kapitularz" />
-                        <TagChip title="Fantastyka" />
-                        <TagChip title="Anime" />
+                    <PrimaryButton title={props.eventData.name} />
+                        <FlatList data={props.eventData.tags}
+                            renderItem={({item}) => (
+                                <TagChip title={item} />
+                            )}
+                        />
                 </View>
             </View>
         </Pressable>

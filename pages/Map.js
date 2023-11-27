@@ -63,8 +63,8 @@ export const MapScreen = ({ navigation }) => {
       "radius": Math.floor(circleRadius / 1000)
     })
     .then(response => {
-        console.log(response);
-        loadMarkersFromServer(response)
+      console.log(response.data);
+      loadMarkersFromServer(response.data)
     })
     .catch(error => {
         console.log(error);

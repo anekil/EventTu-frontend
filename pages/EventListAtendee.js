@@ -3,10 +3,11 @@ import {FlatList, Text, View} from 'react-native';
 import {FloatingButton} from "../components/Buttons";
 import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
 import {HeaderAuthorized} from "../components/Headers";
-import {EventMini} from "../components/Event";
+import {EventMini} from "../components/Events";
+import ownerEventsExample from "../examples/ownerEventsExample.json";  // example content of events
 
 export function ListScreen({ navigation }) {
-    const events = [1, 2, 3, 4];
+    const events = ownerEventsExample;
 
     return (
         <>
@@ -14,11 +15,11 @@ export function ListScreen({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FlatList data={events}
                       renderItem={({item}) => (
-                          <EventMini
-                              onPress={() => navigation.navigate('Details')}
-                              title={item.label}
-                          /> )
-                      }
+                        <EventMini
+                            onPress={() => navigation.navigate('Details', item.id)}
+                            eventData={item}
+                        /> )
+                    }
             />
             <FloatingButton icon={ faFilter } onPress={() => navigation.navigate('Filters')} />
         </View>

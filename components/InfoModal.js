@@ -13,7 +13,7 @@ export const InfoPopup = props => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.iconContainer}>
-          <Icon name="times-circle" size={60} color="red" />
+          <Icon name={props.iconType} size={60} color={props.iconColor} />
         </View>
         <Text style={styles.text}>{props.info}</Text>
         <PrimaryButton title="Close" onPress={props.onClose} />
