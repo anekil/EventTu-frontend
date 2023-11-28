@@ -36,7 +36,7 @@ export function ProfileScreen({ navigation }) {
 
         axios.post(sendTo("auth/logout"), {})
           .then(response => {
-              console.log(response)
+              console.log(response.data)
           })
           .catch(error => {
               console.log(error)

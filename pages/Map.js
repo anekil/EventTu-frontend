@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import MapView, { Marker, Callout, Circle } from 'react-native-maps';
 import * as Location from 'expo-location';
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
@@ -33,18 +34,16 @@ export const MapScreen = ({ navigation }) => {
     ])
   }
 
-  const loadMarkersFromServer = (response) => {
+  function loadMarkersFromServer(events) {
     try {
-      const serverResponse = response.data;
-
-      const newMarkers = serverResponse.map(event => ({
+      setMarkers([]);
+      const newMarkers = events.map(event => ({
         id: uuidv4(),
         title: event.name,
         latitude: event.latitude,
         longitude: event.longitude,
         description: event.description
       }));
-
       setMarkers(newMarkers);
 
     } catch (error) {
@@ -57,10 +56,14 @@ export const MapScreen = ({ navigation }) => {
     console.log("Entered onRegionChangeComplete: " + JSON.stringify(region));
     setLocation(region);
     
-    axios.post(sendTo("events/location"), {
+    axios.post(sendTo("events/search"), {
       "latitude" : region.latitude, 
       "longitude": region.longitude,
-      "radius": Math.floor(circleRadius / 1000)
+      "radius": Math.floor(circleRadius / 1000),
+      //"searchString": "event",
+      "startDate": "2023-11-27",
+      "endDate": "2023-11-27",
+      //"isFree": true,
     })
     .then(response => {
       console.log(response.data);
