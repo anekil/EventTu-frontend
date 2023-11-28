@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import MapView, { Marker, Callout, Circle } from 'react-native-maps';
 import * as Location from 'expo-location';
 import 'react-native-get-random-values';
@@ -10,6 +10,7 @@ import { sendTo } from '../utils/Links';
 import { FloatingButton } from "../components/Buttons"
 import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
 import {HeaderAuthorized} from "../components/Headers";
+import colors from "../theme/Colors";
 
 export const MapScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
@@ -17,6 +18,35 @@ export const MapScreen = ({ navigation }) => {
   const [pin, setPin] = useState(null);
   const [markers, setMarkers] = useState([]);
   const circleRadius = 2000
+
+  // Location settings
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      console.log("Entered loaction: " + JSON.stringify(location));
+      onRegionChangeComplete({
+        "longitudeDelta":location.coords.accuracy / 1000,
+        "latitudeDelta":location.coords.accuracy / 1000,
+        "longitude":location.coords.longitude,
+        "latitude":location.coords.latitude,
+      });  // init first move to show events
+      setLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+      console.log(location);
+    })();
+  }, []);
+  if (location === null) { return <ActivityIndicator size="large" color={colors.primary} />; }
+
 
   const handleLongPress = (event) => {
     console.log("Entered handleLongPress");
@@ -41,7 +71,7 @@ export const MapScreen = ({ navigation }) => {
   }
 
   // event for map drag
-  const onRegionChangeComplete = (region) => {
+  function onRegionChangeComplete(region){
     console.log("Entered onRegionChangeComplete: " + JSON.stringify(region));
     setLocation(region);
     
@@ -63,28 +93,7 @@ export const MapScreen = ({ navigation }) => {
     });
 
   };
-  
 
-  // Location settings
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
-      console.log(location);
-    })();
-  }, []);
-  
 
   return (
     <>
