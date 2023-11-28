@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import MapView, { Marker, Callout, Circle } from 'react-native-maps';
 import * as Location from 'expo-location';
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
@@ -9,6 +10,7 @@ import { sendTo } from '../utils/Links';
 import { FloatingButton } from "../components/Buttons"
 import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
 import {HeaderAuthorized} from "../components/Headers";
+import colors from "../theme/Colors";
 
 export const MapScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
@@ -16,63 +18,6 @@ export const MapScreen = ({ navigation }) => {
   const [pin, setPin] = useState(null);
   const [markers, setMarkers] = useState([]);
   const circleRadius = 2000
-
-  const handleLongPress = (event) => {
-    console.log("Entered handleLongPress");
-    setPin(event.nativeEvent.coordinate);
-  };
-
-  // TODO: Dummy events (will be deleted when CORS will works)
-  const loadDummyMarkers = (region) => {
-    const randomOffset = () => (Math.random() - 0.5) * (circleRadius / 1000 / 111) * 2;
-    setMarkers([
-      {id: 'event1', title: 'Event 1', latitude: region.latitude + randomOffset(), longitude: region.longitude + randomOffset(), description: 'Description for Event 1'},
-      {id: 'event2', title: 'Event 2', latitude: region.latitude + randomOffset(), longitude: region.longitude + randomOffset(), description: 'Description for Event 2'},
-      {id: 'event3', title: 'Event 3', latitude: region.latitude + randomOffset(), longitude: region.longitude + randomOffset(), description: 'Description for Event 3'},
-      {id: 'event4', title: 'Event 4', latitude: region.latitude + randomOffset(), longitude: region.longitude + randomOffset(), description: 'Description for Event 4'}
-    ])
-  }
-
-  const loadMarkersFromServer = (response) => {
-    try {
-      const serverResponse = response.data;
-
-      const newMarkers = serverResponse.map(event => ({
-        id: uuidv4(),
-        title: event.name,
-        latitude: event.latitude,
-        longitude: event.longitude,
-        description: event.description
-      }));
-
-      setMarkers(newMarkers);
-
-    } catch (error) {
-        console.error('Error fetching markers:', error);
-    }
-  }
-
-  // event for map drag
-  const onRegionChangeComplete = (region) => {
-    console.log("Entered onRegionChangeComplete: " + JSON.stringify(region));
-    setLocation(region);
-    
-    axios.post(sendTo("events/location"), {
-      "latitude" : region.latitude, 
-      "longitude": region.longitude,
-      "radius": Math.floor(circleRadius / 1000)
-    })
-    .then(response => {
-      console.log(response.data);
-      loadMarkersFromServer(response.data)
-    })
-    .catch(error => {
-        console.log(error);
-        loadDummyMarkers(region)
-    });
-
-  };
-  
 
   // Location settings
   useEffect(() => {
@@ -84,6 +29,13 @@ export const MapScreen = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
+      console.log("Entered loaction: " + JSON.stringify(location));
+      onRegionChangeComplete({
+        "longitudeDelta":location.coords.accuracy / 1000,
+        "latitudeDelta":location.coords.accuracy / 1000,
+        "longitude":location.coords.longitude,
+        "latitude":location.coords.latitude,
+      });  // init first move to show events
       setLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -93,7 +45,55 @@ export const MapScreen = ({ navigation }) => {
       console.log(location);
     })();
   }, []);
-  
+  if (location === null) { return <ActivityIndicator size="large" color={colors.primary} />; }
+
+
+  const handleLongPress = (event) => {
+    console.log("Entered handleLongPress");
+    setPin(event.nativeEvent.coordinate);
+  };
+
+  function loadMarkersFromServer(events) {
+    try {
+      setMarkers([]);
+      const newMarkers = events.map(event => ({
+        id: uuidv4(),
+        title: event.name,
+        latitude: event.latitude,
+        longitude: event.longitude,
+        description: event.description
+      }));
+      setMarkers(newMarkers);
+
+    } catch (error) {
+        console.error('Error fetching markers:', error);
+    }
+  }
+
+  // event for map drag
+  function onRegionChangeComplete(region){
+    console.log("Entered onRegionChangeComplete: " + JSON.stringify(region));
+    setLocation(region);
+    
+    axios.post(sendTo("events/search"), {
+      "latitude" : region.latitude, 
+      "longitude": region.longitude,
+      "radius": Math.floor(circleRadius / 1000),
+      //"searchString": "event",
+      "startDate": "2023-11-27",
+      "endDate": "2023-11-27",
+      //"isFree": true,
+    })
+    .then(response => {
+      console.log(response.data);
+      loadMarkersFromServer(response.data)
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+  };
+
 
   return (
     <>

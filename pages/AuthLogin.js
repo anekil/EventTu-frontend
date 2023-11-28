@@ -119,7 +119,6 @@ export function LoginScreen({ navigation }) {
                 />
 
             </FormView>
-            <SubmitButton title="Bypass" onPress={redirect} />
         </ScrollView>
     );
 }
