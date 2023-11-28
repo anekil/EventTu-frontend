@@ -5,7 +5,6 @@ import { FloatingButton } from "../components/Buttons"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {HeaderAuthorized} from "../components/Headers";
 import {EventMini} from "../components/Events";
-import ownerEventsExample from "../examples/ownerEventsExample.json";  // example content of events
 import { saveUserData, getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import { sendTo } from '../utils/Links';
@@ -41,9 +40,6 @@ export function OrganizerEventsScreen({ navigation }) {
       })
       .catch(error => {
           console.log(error);
-          saveUserData(Container.OWNER_EVENTS, JSON.stringify(ownerEventsExample));
-          console.log(typeof ownerEventsExample)
-          setOwnerEvents(ownerEventsExample);
       });
     }
 

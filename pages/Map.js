@@ -23,17 +23,6 @@ export const MapScreen = ({ navigation }) => {
     setPin(event.nativeEvent.coordinate);
   };
 
-  // TODO: Dummy events (will be deleted when CORS will works)
-  const loadDummyMarkers = (region) => {
-    const randomOffset = () => (Math.random() - 0.5) * (circleRadius / 1000 / 111) * 2;
-    setMarkers([
-      {id: 'event1', title: 'Event 1', latitude: region.latitude + randomOffset(), longitude: region.longitude + randomOffset(), description: 'Description for Event 1'},
-      {id: 'event2', title: 'Event 2', latitude: region.latitude + randomOffset(), longitude: region.longitude + randomOffset(), description: 'Description for Event 2'},
-      {id: 'event3', title: 'Event 3', latitude: region.latitude + randomOffset(), longitude: region.longitude + randomOffset(), description: 'Description for Event 3'},
-      {id: 'event4', title: 'Event 4', latitude: region.latitude + randomOffset(), longitude: region.longitude + randomOffset(), description: 'Description for Event 4'}
-    ])
-  }
-
   function loadMarkersFromServer(events) {
     try {
       setMarkers([]);
@@ -71,7 +60,6 @@ export const MapScreen = ({ navigation }) => {
     })
     .catch(error => {
         console.log(error);
-        loadDummyMarkers(region)
     });
 
   };
