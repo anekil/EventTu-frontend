@@ -13,14 +13,13 @@ import { useIsFocused } from '@react-navigation/native';
 
 export function OrganizerEventsScreen({ navigation }) {
     const [ownerEvents, setOwnerEvents] = React.useState(null);
-    const isFocused = useIsFocused();
+    const isFocused = useIsFocused();  // variable used to refresh a list of events
 
     // Loading user data
     React.useEffect(() => {
       (async () => {
           if(isFocused){
             try {
-              console.log("here");
                 readEvents();
             } catch (error) {
                 console.error('Error fetching user data:', error);
