@@ -10,8 +10,8 @@ import { Container } from "../utils/ContainerEnum";
 import { saveUserData, getUserData } from "../utils/Storage";
 
 export function LoginScreen({ navigation }) {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [email, setEmail] = React.useState('test@test.com');
+    const [password, setPassword] = React.useState('test');
     const [isFailurePopupVisible, setFailurePopupVisible] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState(false);
     const [role, setRole] = React.useState(null);
