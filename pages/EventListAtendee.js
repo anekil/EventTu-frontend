@@ -1,16 +1,11 @@
 import * as React from 'react';
-import axios from 'axios';
-import {FlatList, Text, View, ActivityIndicator} from 'react-native';
-import {FloatingButton} from "../components/Buttons";
-import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
+import {FlatList, View, ActivityIndicator} from 'react-native';
 import {HeaderAuthorized} from "../components/Headers";
 import {EventMini} from "../components/Events";
 import { Container } from "../utils/ContainerEnum";
 import { useIsFocused } from '@react-navigation/native';
-import { sendTo } from '../utils/Links';
 import colors from "../theme/Colors";
 import { saveUserData, getUserData } from "../utils/Storage";
-import ownerEventsExample from "../examples/ownerEventsExample.json";  // example content of events
 
 export function ListScreen({ navigation }) {
     const [availEvents, setAvailEvents] = React.useState(null);

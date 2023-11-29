@@ -5,7 +5,7 @@ import { FloatingButton } from "../components/Buttons"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {HeaderAuthorized} from "../components/Headers";
 import {EventMini} from "../components/Events";
-import { saveUserData, getUserData } from "../utils/Storage";
+import { saveUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import { sendTo } from '../utils/Links';
 import colors from "../theme/Colors";

@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {FormView} from "../components/FormElements";
-import {PrimaryButton, TagChip} from "../components/Buttons";
-import colors from "../theme/Colors";
+import {View} from 'react-native';
+import {PrimaryButton} from "../components/Buttons";
 import {EventDetails} from "../components/Events";
 
 export function DetailsScreen() {

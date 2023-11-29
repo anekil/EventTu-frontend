@@ -3,20 +3,15 @@ import {StyleSheet, View, Image, Text, Pressable, ScrollView, FlatList, Activity
 import {IconButton, PrimaryButton, StarButton, TagChip} from "./Buttons";
 import colors from "../theme/Colors";
 import {faLink} from "@fortawesome/free-solid-svg-icons/faLink";
-import { saveUserData, getUserData } from "../utils/Storage";
+import { getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import ExampleImage from "../assets/example.png";
-import {Role} from "../utils/RoleEnum";
 
 export function EventMini(props) {
     return (
         <Pressable style={{ ...styles.eventCard, flex: 1, justifyContent: 'center' }} onPress={props.onPress}>
             <View style={{ flexDirection: 'row' }}>
                 <ImageWithStar style={{ width: '50%' }} />
-                { /*role === Role.ORGANIZER
-                    ? <ImageWithoutStar style={{ width: '50%' }} />
-                    : <ImageWithStar style={{ width: '50%' }} />*/
-                }
                 <View>
                     <PrimaryButton title={props.eventData.name} />
                         <FlatList data={props.eventData.tags}

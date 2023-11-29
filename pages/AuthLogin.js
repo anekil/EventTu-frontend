@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import {ScrollView, View, ActivityIndicator} from 'react-native';
+import {ScrollView, ActivityIndicator} from 'react-native';
 import { FormView, FormText, FormTextInput, FormLink, SubmitButton } from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
 import colors from "../theme/Colors";

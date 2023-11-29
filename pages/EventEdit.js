@@ -1,9 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
-import {useEffect, useState} from 'react';
-import { useRoute } from '@react-navigation/native';
-import MultiSelect from 'react-native-multiple-select';
+import {useState} from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {
@@ -21,7 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "../components/Buttons";
 import {faFileImage} from "@fortawesome/free-solid-svg-icons/faFileImage";
 import { Container } from "../utils/ContainerEnum";
-import { saveUserData, getUserData } from "../utils/Storage";
+import { getUserData } from "../utils/Storage";
 
 export function EventDetailsScreen({ navigation }) {
     const [title, setTitle] = React.useState('');
