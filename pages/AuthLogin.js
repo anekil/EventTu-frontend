@@ -1,13 +1,13 @@
 import * as React from 'react';
 import axios from 'axios';
-import {ScrollView, ActivityIndicator} from 'react-native';
+import {ScrollView } from 'react-native';
 import { FormView, FormText, FormTextInput, FormLink, SubmitButton } from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
-import colors from "../theme/Colors";
 import { sendTo } from '../utils/Links';
 import { Role } from "../utils/RoleEnum";
 import { Container } from "../utils/ContainerEnum";
 import { saveUserData, getUserData } from "../utils/Storage";
+import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export function LoginScreen({ navigation }) {
     const [email, setEmail] = React.useState('test@test.com');
@@ -28,7 +28,7 @@ export function LoginScreen({ navigation }) {
         })();
     }, []);
     // show loading if user data not ready
-    if (!role) { return <ActivityIndicator size="large" color={colors.primary} />; }
+    if (!role) { return <LoadingIndicator/>; }
 
     // TODO: Will be deleted when connection between front and back will work
     const dummyUserLogin = {

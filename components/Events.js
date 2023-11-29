@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {StyleSheet, View, Image, Text, Pressable, ScrollView, FlatList, ActivityIndicator} from 'react-native';
+import {StyleSheet, View, Image, Text, Pressable, ScrollView, FlatList } from 'react-native';
 import {IconButton, PrimaryButton, StarButton, TagChip} from "./Buttons";
 import colors from "../theme/Colors";
 import {faLink} from "@fortawesome/free-solid-svg-icons/faLink";
 import { getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import ExampleImage from "../assets/example.png";
+import { LoadingIndicator } from './LoadingIndicator';
 
 export function EventMini(props) {
     return (
@@ -57,7 +58,7 @@ export const EventDetails = (props) => {
             }
         })();
     },[]);
-    if (activeAvailEvent === null) { return <ActivityIndicator size="large" color={colors.primary} />; }
+    if (activeAvailEvent === null) { return <LoadingIndicator/>; }
 
     return (
         <View style={ styles.detailsContainer } >

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import {FlatList, View, ActivityIndicator } from 'react-native';
+import {FlatList, View } from 'react-native';
 import { FloatingButton } from "../components/Buttons"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {HeaderAuthorized} from "../components/Headers";
@@ -8,8 +8,8 @@ import {EventMini} from "../components/Events";
 import { saveUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import { sendTo } from '../utils/Links';
-import colors from "../theme/Colors";
 import { useIsFocused } from '@react-navigation/native';
+import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export function OrganizerEventsScreen({ navigation }) {
     const [ownerEvents, setOwnerEvents] = React.useState(null);
@@ -28,7 +28,7 @@ export function OrganizerEventsScreen({ navigation }) {
       })();
     }, [isFocused]);
     // show loading if user data not ready
-    if (!ownerEvents) { return <ActivityIndicator size="large" color={colors.primary} />; }
+    if (!ownerEvents) { return <LoadingIndicator/>; }
 
     function readEvents(){
       axios.get(sendTo("events/owner"))

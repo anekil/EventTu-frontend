@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {FlatList, View, ActivityIndicator} from 'react-native';
+import {FlatList, View } from 'react-native';
 import {HeaderAuthorized} from "../components/Headers";
 import {EventMini} from "../components/Events";
 import { Container } from "../utils/ContainerEnum";
 import { useIsFocused } from '@react-navigation/native';
-import colors from "../theme/Colors";
 import { saveUserData, getUserData } from "../utils/Storage";
+import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export function ListScreen({ navigation }) {
     const [availEvents, setAvailEvents] = React.useState(null);
@@ -27,7 +27,7 @@ export function ListScreen({ navigation }) {
       })();
     }, [isFocused]);
     // show loading if user data not ready
-    if (!availEvents) { return <ActivityIndicator size="large" color={colors.primary} />; }
+    if (!availEvents) { return <LoadingIndicator/>; }
   
     function onUserEventPress(eventId){
         if(eventId){
