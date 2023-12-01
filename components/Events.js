@@ -7,19 +7,22 @@ import { getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import ExampleImage from "../assets/example.png";
 import { LoadingIndicator } from './LoadingIndicator';
+import {Role} from "../utils/RoleEnum";
 
-export function EventMini(props) {
+export async function EventMini(props) {
     return (
-        <Pressable style={{ ...styles.eventCard, flex: 1, justifyContent: 'center' }} onPress={props.onPress}>
-            <View style={{ flexDirection: 'row' }}>
-                <ImageWithStar style={{ width: '50%' }} />
-                <View>
-                    <PrimaryButton title={props.eventData.name} />
-                        <FlatList data={props.eventData.tags}
-                            renderItem={({item}) => (
-                                <TagChip title={item} />
-                            )}
-                        />
+        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center'}} onPress={props.onPress}>
+            <View style={{flexDirection: 'row'}}>
+                <> { await getUserData(Container.ROLE) === Role.ATTENDEE
+                    ? <ImageWithStar style={{width: '50%'}}/>
+                    : <ImageWithoutStar style={{width: '50%'}}/>} </>
+                <View style={{alignItems: "center",}}>
+                    <PrimaryButton title={props.eventData.name}/>
+                    <FlatList data={props.eventData.tags}
+                              renderItem={({item}) => (
+                                  <TagChip title={item}/>
+                              )}
+                    />
                 </View>
             </View>
         </Pressable>
@@ -92,7 +95,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.form_white,
         borderWidth: 2,
         borderColor: colors.extra_black,
-        marginBottom: 10
+        margin: 10,
+        overflow: "scroll",
     },
     detailsContainer: {
         borderRadius: 20,
