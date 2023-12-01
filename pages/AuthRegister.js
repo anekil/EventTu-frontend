@@ -1,13 +1,13 @@
 import * as React from 'react';
 import axios from 'axios';
-import {ScrollView, View, ActivityIndicator} from 'react-native';
+import {ScrollView } from 'react-native';
 import { FormView, FormText, FormTextInput, SubmitButton } from "../components/FormElements";
 import { InfoPopup } from '../components/InfoModal';
-import colors from "../theme/Colors";
 import { sendTo } from '../utils/Links';
 import { Role } from "../utils/RoleEnum";
 import { Container } from "../utils/ContainerEnum";
 import { getUserData } from "../utils/Storage";
+import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export function RegisterScreen({ navigation }) {
     const [name, setName] = React.useState('');
@@ -32,7 +32,7 @@ export function RegisterScreen({ navigation }) {
         fetchUserData();
     }, []);
     // show loading if user data not ready
-    if (!role) { return <ActivityIndicator size="large" color={colors.primary} />; }
+    if (!role) { return <LoadingIndicator/>; }
 
 
     const validateRegister = (name, email, tel, password, repeatPassword) => {

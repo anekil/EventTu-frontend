@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {FormText, FormView, SubmitButton, TagsPicker} from "../components/FormElements";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {IconButton, PrimaryButton, TagChip} from "../components/Buttons";
+import {IconButton} from "../components/Buttons";
 // https://github.com/react-native-datetimepicker/datetimepicker
 import Slider from '@react-native-community/slider';
 import colors from "../theme/Colors";

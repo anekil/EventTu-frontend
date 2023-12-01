@@ -10,7 +10,9 @@ import { sendTo } from '../utils/Links';
 import { FloatingButton } from "../components/Buttons"
 import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
 import {HeaderAuthorized} from "../components/Headers";
-import colors from "../theme/Colors";
+import { Container } from "../utils/ContainerEnum";
+import { saveUserData } from '../utils/Storage';
+import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export const MapScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
@@ -45,7 +47,7 @@ export const MapScreen = ({ navigation }) => {
       console.log(location);
     })();
   }, []);
-  if (location === null) { return <ActivityIndicator size="large" color={colors.primary} />; }
+  if (location === null) { return <LoadingIndicator/>; }
 
 
   const handleLongPress = (event) => {
@@ -86,6 +88,7 @@ export const MapScreen = ({ navigation }) => {
     })
     .then(response => {
       console.log(response.data);
+      saveUserData(Container.AVAIL_EVENTS, response.data);
       loadMarkersFromServer(response.data)
     })
     .catch(error => {

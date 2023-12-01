@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View } from 'react-native';
 import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
 import { FormText, FormView } from "../components/FormElements";
@@ -9,6 +9,8 @@ import { HeaderAppName } from "../components/Headers";
 import { saveUserData, getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import { sendTo } from '../utils/Links';
+import { LoadingIndicator } from '../components/LoadingIndicator';
+
 
 export function ProfileScreen({ navigation }) {
     const [userLogin, setUserLogin] = React.useState(null);
@@ -25,7 +27,7 @@ export function ProfileScreen({ navigation }) {
         })();
     }, []);
     // show loading if user data not ready
-    if (!userLogin) { return <ActivityIndicator size="large" color={colors.primary} />; }
+    if (!userLogin) { return <LoadingIndicator/>; }
 
     // reset user data and stack
     function resetStack() {

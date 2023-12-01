@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, Touchable, View} from "react-native";
+import {Pressable, StyleSheet, Text, View} from "react-native";
 import * as React from "react";
 import colors from "../theme/Colors";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";

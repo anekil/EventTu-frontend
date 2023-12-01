@@ -1,20 +1,18 @@
 import * as React from 'react';
-import {StyleSheet, View, Image, Text, Pressable, ScrollView, FlatList} from 'react-native';
+import {StyleSheet, View, Image, Text, Pressable, ScrollView, FlatList } from 'react-native';
 import {IconButton, PrimaryButton, StarButton, TagChip} from "./Buttons";
 import colors from "../theme/Colors";
 import {faLink} from "@fortawesome/free-solid-svg-icons/faLink";
+import { getUserData } from "../utils/Storage";
+import { Container } from "../utils/ContainerEnum";
 import ExampleImage from "../assets/example.png";
-import {Role} from "../utils/RoleEnum";
+import { LoadingIndicator } from './LoadingIndicator';
 
 export function EventMini(props) {
     return (
         <Pressable style={{ ...styles.eventCard, flex: 1, justifyContent: 'center' }} onPress={props.onPress}>
             <View style={{ flexDirection: 'row' }}>
                 <ImageWithStar style={{ width: '50%' }} />
-                { /*role === Role.ORGANIZER
-                    ? <ImageWithoutStar style={{ width: '50%' }} />
-                    : <ImageWithStar style={{ width: '50%' }} />*/
-                }
                 <View>
                     <PrimaryButton title={props.eventData.name} />
                         <FlatList data={props.eventData.tags}
@@ -46,20 +44,33 @@ const ImageWithoutStar = (props) => {
 };
 
 export const EventDetails = (props) => {
+    const [activeAvailEvent, setActiveAvailEvent] = React.useState(null);
+
+    // Loading user data
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const data = await getUserData(Container.AVAIL_ACTIVE_EVENT);
+                const parsedData = JSON.parse(data);
+                setActiveAvailEvent(parsedData);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        })();
+    },[]);
+    if (activeAvailEvent === null) { return <LoadingIndicator/>; }
+
     return (
         <View style={ styles.detailsContainer } >
             <ScrollView scrollEnabled={true} >
-            <PrimaryButton title={"Kapitularz"} />
+            <PrimaryButton title={activeAvailEvent.name} />
             <View >
                 <ImageWithStar />
             </View>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
-                <TagChip title="Fantastyka" />
-                <TagChip title="Anime" />
-                <TagChip title="Gry planszowe" />
-                <TagChip title="Fantastyka" />
-                <TagChip title="Anime" />
-                <TagChip title="Gry planszowe" />
+                {activeAvailEvent.tags.map((title, index) => (
+                    <TagChip key={index} title={title} />
+                ))}
             </View>
             <Pressable style={{flexDirection: 'row'}}>
                 <Text style={styles.text}>Link do wydarzenia</Text>
@@ -67,10 +78,7 @@ export const EventDetails = (props) => {
             </Pressable>
 
             <View style={styles.descriptionContainer} >
-                <Text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla feugiat lorem at est egestas, ut sollicitudin ante dignissim. Sed nec ante tempus risus pellentesque scelerisque. Nullam porta enim vel arcu aliquam, a pulvinar sem tristique. Nullam elementum nibh at odio mattis placerat. Aliquam et sem massa. Proin neque turpis, pulvinar sed lectus eu, dignissim fringilla tortor. Fusce quis sapien sed augue vehicula luctus vel vitae arcu. Curabitur vitae nunc pellentesque, luctus ex vel, tincidunt felis. Ut vestibulum in sem nec tempus. Nullam congue posuere nisl, sit amet tempor dolor efficitur et. Donec vel mattis ex, ac efficitur arcu.
-                    Phasellus dictum felis nec vehicula congue. Phasellus ac sem convallis, sagittis orci sed, feugiat libero. Mauris sagittis, massa aliquet finibus ultrices, quam arcu fringilla lorem, ut ultricies ipsum turpis sit amet metus. Ut ac metus eget libero aliquet commodo quis nec nunc. Suspendisse hendrerit, orci nec sollicitudin congue, libero eros luctus magna, nec molestie dui sapien et purus. Maecenas pellentesque, nunc a pharetra pellentesque, sapien risus consectetur turpis, ut bibendum metus diam vel purus. Mauris ut faucibus eros, in faucibus ex. Nulla pretium dui quis sollicitudin eleifend. Etiam ut odio eu velit tempus posuere. Pellentesque ut nibh in ex commodo rhoncus. Donec sed hendrerit tortor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin varius massa eget leo molestie scelerisque.
-                </Text>
+                <Text>{activeAvailEvent.description}</Text>
             </View>
             </ScrollView>
         </View>

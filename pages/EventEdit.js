@@ -1,9 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
-import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
-import {useEffect, useState} from 'react';
-import { useRoute } from '@react-navigation/native';
-import MultiSelect from 'react-native-multiple-select';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import {useState} from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {
@@ -21,7 +19,8 @@ import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "../components/Buttons";
 import {faFileImage} from "@fortawesome/free-solid-svg-icons/faFileImage";
 import { Container } from "../utils/ContainerEnum";
-import { saveUserData, getUserData } from "../utils/Storage";
+import { getUserData } from "../utils/Storage";
+import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export function EventDetailsScreen({ navigation }) {
     const [title, setTitle] = React.useState('');
@@ -81,7 +80,7 @@ export function EventDetailsScreen({ navigation }) {
         })();
     }, []);
     // show loading if user data not ready
-    if (activeOwnerEvent === null || location === null) { return <ActivityIndicator size="large" color={colors.primary} />; }
+    if (activeOwnerEvent === null || location === null) { return <LoadingIndicator/>; }
 
     console.log("active event: " + JSON.stringify(activeOwnerEvent));
     console.log("type of active event: " + JSON.stringify(typeof activeOwnerEvent));
