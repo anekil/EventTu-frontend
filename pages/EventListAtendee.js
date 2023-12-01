@@ -6,8 +6,12 @@ import { Container } from "../utils/ContainerEnum";
 import { useIsFocused } from '@react-navigation/native';
 import { saveUserData, getUserData } from "../utils/Storage";
 import { LoadingIndicator } from '../components/LoadingIndicator';
+import {Searchbar} from "react-native-paper";
 
 export function ListScreen({ navigation }) {
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const onChangeSearch = query => setSearchQuery(query);
+
     const [availEvents, setAvailEvents] = React.useState(null);
     const isFocused = useIsFocused();  // variable used to refresh a list of events
 
@@ -41,7 +45,13 @@ export function ListScreen({ navigation }) {
 
     return (
         <>
-        <HeaderAuthorized navigation={navigation} />
+        <HeaderAuthorized navigation={navigation}>
+            <Searchbar
+                placeholder="Search"
+                onChangeText={onChangeSearch}
+                value={searchQuery}
+            />
+        </HeaderAuthorized>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FlatList data={availEvents}
                       renderItem={({item}) => (
