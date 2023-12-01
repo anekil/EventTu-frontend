@@ -8,59 +8,44 @@ import Slider from '@react-native-community/slider';
 import colors from "../theme/Colors";
 // https://github.com/callstack/react-native-slider
 import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
-import {faClock} from "@fortawesome/free-solid-svg-icons/faClock";
-import {Checkbox} from "expo-checkbox";
+
+import {DatePickerModal} from "react-native-paper-dates";
+import {Checkbox} from "react-native-paper";
 
 export function FiltersScreen({ navigation }) {
 
-    const [fromDate, setFromDate] = useState(new Date());
-    const [toDate, setToDate] = useState(fromDate);
+    const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
     const [distance, setDistance] = React.useState(10);
     const [selectedTags, setSelectedTags] = React.useState([]);
     const [onlyFavourites, setOnlyFavourites] =  React.useState(false);
+    const [onlyFree, setOnlyFree] =  React.useState(false);
 
     const handleFiltering = () => {
         const filters = {
-            "fromDate": fromDate.toLocaleString(),
-            "toDate": toDate.toLocaleString(),
+            "fromDate": range.startDate ? range.startDate.toLocaleString() : "",
+            "toDate": range.endDate ? range.endDate.toLocaleString() : "",
             "distance": distance,
             "selectedTags": selectedTags,
-            "onlyFavourites": onlyFavourites
+            "onlyFavourites": onlyFavourites,
+            "onlyFree": onlyFree
         };
         console.log(filters);
     }
 
-    const [minDate, setMinDate] = useState(new Date());
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
-    const [isFrom, setIsFrom] = useState(true)
 
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate;
-        if(isFrom){
-            setFromDate(currentDate);
-            if(toDate<fromDate)
-                setToDate(fromDate);
-        }
-        else
-            setToDate(currentDate);
-        setShow(false);
-    };
+    const [open, setOpen] = React.useState(false);
 
-    const showMode = (currentMode) => {
-        setMode(currentMode);
-        setMinDate(isFrom ? new Date() : fromDate);
-        setShow(true);
-    };
+    const onDismiss = React.useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
 
-    const showDatepicker = () => {
-        showMode('date');
-    };
-
-    const showTimepicker = () => {
-        showMode('time');
-    };
-
+    const onConfirm = React.useCallback(
+        ({ startDate, endDate }) => {
+            setOpen(false);
+            setRange({ startDate, endDate });
+        },
+        [setOpen, setRange]
+    );
 
     return (
         <ScrollView scrollEnabled={true} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -68,49 +53,22 @@ export function FiltersScreen({ navigation }) {
                 <FormText title="Choose filters"/>
 
                 <FormText title="Date"/>
-                <View style={{flexDirection:"column"}}>
-                    <FormText title="From"/>
-                    <View style={ styles.propertyContainer }>
-                        <IconButton icon={ faClock }
-                                    onPress={()=>{
-                                        setIsFrom(true);
-                                        showTimepicker();
-                                    }}  />
-                        <Text>{fromDate.toLocaleTimeString()}</Text>
-                        <IconButton icon={ faCalendar }
-                                    onPress={()=>{
-                                        setIsFrom(true);
-                                        showDatepicker();
-                                    }}  />
-                        <Text>{fromDate.toLocaleDateString()}</Text>
-                    </View>
-                    <FormText title="To"/>
-                    <View style={ styles.propertyContainer }>
-                        <IconButton icon={ faClock }
-                                    onPress={()=>{
-                                        setIsFrom(false);
-                                        showTimepicker();
-                                    }}  />
-                        <Text>{toDate.toLocaleTimeString()}</Text>
-                        <IconButton icon={ faCalendar }
-                                    onPress={()=>{
-                                        setIsFrom(false);
-                                        showDatepicker();
-                                    }}  />
-                        <Text>{toDate.toLocaleDateString()}</Text>
-                    </View>
+                <View style={styles.propertyContainer}>
+                    <IconButton icon={ faCalendar } onPress={() => setOpen(true)}  />
+                    { range.startDate
+                        ? <Text>{range.startDate.toLocaleDateString()} - {range.endDate.toLocaleDateString()}</Text>
+                        : <></> }
                 </View>
 
-                {show && (
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={isFrom ? fromDate : toDate}
-                        mode={mode}
-                        is24Hour={true}
-                        onChange={onChange}
-                        minimumDate={minDate}
-                    />
-                )}
+                <DatePickerModal
+                    locale="en"
+                    mode="range"
+                    visible={open}
+                    onDismiss={onDismiss}
+                    startDate={range.startDate}
+                    endDate={range.endDate}
+                    onConfirm={onConfirm}
+                />
 
                 <FormText title="Location"/>
                 <View style={ styles.propertyContainer }>
@@ -131,13 +89,25 @@ export function FiltersScreen({ navigation }) {
                 <FormText title="Tags"/>
                 <TagsPicker selectedTags={ selectedTags } setSelectedTags={ setSelectedTags } />
 
-                <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                <View style={styles.propertyContainer}>
                     <FormText title="Only favourites "/>
                     <Checkbox
-                        style={styles.checkbox}
-                        value={onlyFavourites}
-                        onValueChange={setOnlyFavourites}
-                        color={ colors.extra_black }
+                        status={onlyFavourites ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            setOnlyFavourites(!onlyFavourites);
+                        }}
+                        color={colors.extra_black}
+                    />
+                </View>
+
+                <View style={styles.propertyContainer}>
+                    <FormText title="Only free "/>
+                    <Checkbox
+                        status={onlyFree ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            setOnlyFree(!onlyFree);
+                        }}
+                        color={colors.extra_black}
                     />
                 </View>
 
@@ -150,7 +120,6 @@ export function FiltersScreen({ navigation }) {
 const styles = StyleSheet.create({
     propertyContainer: {
         flexDirection: "row",
-        alignItems: 'center',
-        justifyContent: 'center'
+        alignItems: 'center'
     }
 });
