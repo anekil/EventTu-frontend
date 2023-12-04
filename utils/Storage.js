@@ -21,4 +21,21 @@ export async function getUserData(dataContainer) {
         console.log(e);
         return e;
     }
-};
+}
+
+export async function saveFilters(filters) {
+    try {
+        await AsyncStorage.setItem('filters', JSON.stringify(filters));
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export async function getFilters() {
+    try {
+        return await AsyncStorage.getItem('filters');
+    } catch (e) {
+        console.log(e);
+        return e;
+    }
+}

@@ -11,7 +11,7 @@ import { FloatingButton } from "../components/Buttons"
 import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
 import {HeaderAuthorized} from "../components/Headers";
 import { Container } from "../utils/ContainerEnum";
-import { saveUserData } from '../utils/Storage';
+import {getFilters, saveUserData} from '../utils/Storage';
 import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export const MapScreen = ({ navigation }) => {
@@ -19,7 +19,7 @@ export const MapScreen = ({ navigation }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [pin, setPin] = useState(null);
   const [markers, setMarkers] = useState([]);
-  const circleRadius = 2000
+  const [circleRadius, setCircleRadius] = useState(2);
 
   // Location settings
   useEffect(() => {
@@ -31,7 +31,7 @@ export const MapScreen = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      console.log("Entered loaction: " + JSON.stringify(location));
+      console.log("Entered location: " + JSON.stringify(location));
       onRegionChangeComplete({
         "longitudeDelta":location.coords.accuracy / 1000,
         "latitudeDelta":location.coords.accuracy / 1000,
@@ -73,29 +73,50 @@ export const MapScreen = ({ navigation }) => {
   }
 
   // event for map drag
-  function onRegionChangeComplete(region){
+  async function onRegionChangeComplete(region) {
     console.log("Entered onRegionChangeComplete: " + JSON.stringify(region));
     setLocation(region);
-    
+
+    let filters = getFilters().then(() => {
+      console.log(JSON.stringify(filters));
+      filters = JSON.parse(filters);
+      const {radius, ...filtersData} = filters;
+      if(radius){
+        setCircleRadius(radius);
+      }
+
+      const mapData = {
+        "latitude": region.latitude,
+        "longitude": region.longitude,
+        "radius": circleRadius,
+        "startDate": "2023-11-27",
+        "endDate": "2023-11-27",
+      };
+
+      let data = { ...filtersData, ...mapData };
+      console.log("###");
+      console.log(JSON.stringify(mapData));
+    });
+
     axios.post(sendTo("events/search"), {
-      "latitude" : region.latitude, 
+      "latitude": region.latitude,
       "longitude": region.longitude,
-      "radius": Math.floor(circleRadius / 1000),
+      "radius": circleRadius,
       //"searchString": "event",
       "startDate": "2023-11-27",
       "endDate": "2023-11-27",
       //"isFree": true,
     })
-    .then(response => {
-      console.log(response.data);
-      saveUserData(Container.AVAIL_EVENTS, response.data);
-      loadMarkersFromServer(response.data)
-    })
-    .catch(error => {
-        console.log(error);
-    });
+        .then(response => {
+          console.log(response.data);
+          saveUserData(Container.AVAIL_EVENTS, response.data);
+          loadMarkersFromServer(response.data)
+        })
+        .catch(error => {
+          console.log(error);
+        });
 
-  };
+  }
 
 
   return (
@@ -122,7 +143,7 @@ export const MapScreen = ({ navigation }) => {
 
           <Circle
             center={location}
-            radius={circleRadius}
+            radius={circleRadius*1000}
             fillColor="rgba(100, 100, 200, 0.3)" // semi-transparent fill
             strokeColor="rgba(100, 100, 200, 0.7)" // border color
             strokeWidth={2}

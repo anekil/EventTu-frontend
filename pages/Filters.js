@@ -1,9 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {FormText, FormView, SubmitButton, TagsPicker} from "../components/FormElements";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {IconButton} from "../components/Buttons";
-// https://github.com/react-native-datetimepicker/datetimepicker
 import Slider from '@react-native-community/slider';
 import colors from "../theme/Colors";
 // https://github.com/callstack/react-native-slider
@@ -11,6 +9,9 @@ import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
 
 import {DatePickerModal} from "react-native-paper-dates";
 import {Checkbox} from "react-native-paper";
+import {getFilters, saveFilters} from "../utils/Storage";
+import * as Location from "expo-location";
+import {LoadingIndicator} from "../components/LoadingIndicator";
 
 export function FiltersScreen({ navigation }) {
 
@@ -20,16 +21,38 @@ export function FiltersScreen({ navigation }) {
     const [onlyFavourites, setOnlyFavourites] =  React.useState(false);
     const [onlyFree, setOnlyFree] =  React.useState(false);
 
-    const handleFiltering = () => {
+    useEffect(() => {
+        (async () => {
+            let filters = await getFilters();
+            console.log("filters" + filters);
+            filters = JSON.parse(filters);
+            if(filters["radius"]){
+                setDistance(filters["radius"]);
+            }
+            if(filters["selectedTags"]){
+                setSelectedTags(filters["selectedTags"]);
+            }
+            if(filters["onlyFavourites"]){
+                setOnlyFavourites(filters["onlyFavourites"]);
+            }
+            if(filters["isFree"]){
+                setOnlyFree(filters["isFree"]);
+            }
+        })();
+    }, []);
+
+    const handleFiltering = async () => {
         const filters = {
-            "fromDate": range.startDate ? range.startDate.toLocaleString() : "",
-            "toDate": range.endDate ? range.endDate.toLocaleString() : "",
-            "distance": distance,
+            "startDate": range.startDate ? range.startDate.toLocaleString() : "",
+            "endDate": range.endDate ? range.endDate.toLocaleString() : "",
+            "radius": distance,
             "selectedTags": selectedTags,
             "onlyFavourites": onlyFavourites,
-            "onlyFree": onlyFree
+            "isFree": onlyFree
         };
         console.log(filters);
+        await saveFilters(filters);
+        navigation.goBack();
     }
 
 
@@ -76,7 +99,7 @@ export function FiltersScreen({ navigation }) {
                         style={{width: 200}}
                         value={distance}
                         onValueChange={newDist => setDistance(newDist)}
-                        minimumValue={10}
+                        minimumValue={2}
                         maximumValue={50}
                         step={5}
                         minimumTrackTintColor={colors.primary_dark}
