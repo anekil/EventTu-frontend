@@ -98,7 +98,7 @@ export function EventDetailsScreen({ navigation }) {
         });
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            setImage(result.uri);
             await uploadToDropbox(image).then((url) => setImageUrl(url));
         }
     };
