@@ -6,7 +6,7 @@ import { InfoPopup } from '../components/InfoModal';
 import { sendTo } from '../utils/Links';
 import { Role } from "../utils/RoleEnum";
 import { Container } from "../utils/ContainerEnum";
-import { saveUserData, getUserData } from "../utils/Storage";
+import {saveUserData, getUserData, resetFilters} from "../utils/Storage";
 import { LoadingIndicator } from '../components/LoadingIndicator';
 
 export function LoginScreen({ navigation }) {
@@ -29,14 +29,6 @@ export function LoginScreen({ navigation }) {
     }, []);
     // show loading if user data not ready
     if (!role) { return <LoadingIndicator/>; }
-
-    // TODO: Will be deleted when connection between front and back will work
-    const dummyUserLogin = {
-        "id": 0,
-        "name": "Janusz_" + String(Math.random()),
-        "email": "Janusz@gmail.com",
-        "telephone": "123456789"
-    };
 
     const validateLogin = (email, password) => {
         if(!email || !password){
@@ -65,6 +57,7 @@ export function LoginScreen({ navigation }) {
               .then(response => {
                   console.log(response)
                   saveUserData(Container.LOGIN, response.data);
+                  resetFilters();
                   role === Role.ORGANIZER ? navigation.navigate('OrganizerEvents') : navigation.navigate('Browse Events');
               })
               .catch(error => {
@@ -80,10 +73,6 @@ export function LoginScreen({ navigation }) {
         setFailurePopupVisible(false);
     };
 
-    function redirect(){
-        saveUserData(Container.LOGIN, dummyUserLogin);
-        role === Role.ORGANIZER ? navigation.navigate('OrganizerEvents') : navigation.navigate('Browse Events');
-    }
 
     return (
         <ScrollView scrollEnabled={true} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>

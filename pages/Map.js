@@ -1,25 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import MapView, { Marker, Callout, Circle } from 'react-native-maps';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import MapView, {Callout, Circle, Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import axios from 'axios';
 
-import { sendTo } from '../utils/Links';
-import { FloatingButton } from "../components/Buttons"
+import {sendTo} from '../utils/Links';
+import {FloatingButton} from "../components/Buttons"
 import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
 import {HeaderAuthorized} from "../components/Headers";
-import { Container } from "../utils/ContainerEnum";
+import {Container} from "../utils/ContainerEnum";
 import {getFilters, saveUserData} from '../utils/Storage';
-import { LoadingIndicator } from '../components/LoadingIndicator';
+import {LoadingIndicator} from '../components/LoadingIndicator';
+
+function getFormattedDate(date) {
+  date = new Date(date);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
 
 export const MapScreen = ({ navigation }) => {
+  let today = new Date();
+  let tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [pin, setPin] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [circleRadius, setCircleRadius] = useState(2);
+  const [dateRange, setDateRange] = React.useState({
+    startDate: getFormattedDate(today),
+    endDate: getFormattedDate(tomorrow)
+  });
 
   // Location settings
   useEffect(() => {
@@ -77,45 +94,38 @@ export const MapScreen = ({ navigation }) => {
     console.log("Entered onRegionChangeComplete: " + JSON.stringify(region));
     setLocation(region);
 
-    let filters = getFilters().then(() => {
-      console.log(JSON.stringify(filters));
+    getFilters().then((filters) => {
+      console.log(filters);
       filters = JSON.parse(filters);
-      const {radius, ...filtersData} = filters;
-      if(radius){
-        setCircleRadius(radius);
-      }
+      setCircleRadius(filters.radius);
+      setDateRange({
+        startDate: getFormattedDate(filters.startDate),
+        endDate: getFormattedDate(filters.endDate)
+      });
 
-      const mapData = {
+      let location = {
         "latitude": region.latitude,
         "longitude": region.longitude,
         "radius": circleRadius,
-        "startDate": "2023-11-27",
-        "endDate": "2023-11-27",
+        "startDate": dateRange.startDate,
+        "endDate": dateRange.endDate,
       };
 
-      let data = { ...filtersData, ...mapData };
-      console.log("###");
-      console.log(JSON.stringify(mapData));
+      const requestData = {  ...filters, ...location, };
+
+
+      console.log("Search data: " + JSON.stringify(requestData));
+
+      axios.post(sendTo("events/search"), requestData)
+          .then(response => {
+            console.log(response.data);
+            saveUserData(Container.AVAIL_EVENTS, response.data);
+            loadMarkersFromServer(response.data)
+          })
+          .catch(error => {
+            console.log(error);
+          });
     });
-
-    axios.post(sendTo("events/search"), {
-      "latitude": region.latitude,
-      "longitude": region.longitude,
-      "radius": circleRadius,
-      //"searchString": "event",
-      "startDate": "2023-11-27",
-      "endDate": "2023-11-27",
-      //"isFree": true,
-    })
-        .then(response => {
-          console.log(response.data);
-          saveUserData(Container.AVAIL_EVENTS, response.data);
-          loadMarkersFromServer(response.data)
-        })
-        .catch(error => {
-          console.log(error);
-        });
-
   }
 
 

@@ -9,44 +9,43 @@ import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
 
 import {DatePickerModal} from "react-native-paper-dates";
 import {Checkbox} from "react-native-paper";
-import {getFilters, saveFilters} from "../utils/Storage";
+import {getFilters, resetFilters, saveFilters} from "../utils/Storage";
 import * as Location from "expo-location";
 import {LoadingIndicator} from "../components/LoadingIndicator";
+import {faRefresh} from "@fortawesome/free-solid-svg-icons/faRefresh";
 
 export function FiltersScreen({ navigation }) {
 
     const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
-    const [distance, setDistance] = React.useState(10);
+    const [distance, setDistance] = React.useState(2);
     const [selectedTags, setSelectedTags] = React.useState([]);
     const [onlyFavourites, setOnlyFavourites] =  React.useState(false);
     const [onlyFree, setOnlyFree] =  React.useState(false);
 
     useEffect(() => {
-        (async () => {
-            let filters = await getFilters();
-            console.log("filters" + filters);
-            filters = JSON.parse(filters);
-            if(filters["radius"]){
-                setDistance(filters["radius"]);
-            }
-            if(filters["selectedTags"]){
-                setSelectedTags(filters["selectedTags"]);
-            }
-            if(filters["onlyFavourites"]){
-                setOnlyFavourites(filters["onlyFavourites"]);
-            }
-            if(filters["isFree"]){
-                setOnlyFree(filters["isFree"]);
-            }
-        })();
+        (async () => loadFilters())();
     }, []);
+
+    const loadFilters = async() => {
+        let filters = await getFilters();
+        console.log("filters" + filters);
+        filters = JSON.parse(filters);
+        setDistance(filters["radius"]);
+        setSelectedTags(filters["tags"]);
+        setOnlyFavourites(filters["onlyFavourites"]);
+        setOnlyFree(filters["isFree"]);
+        setRange({
+            startDate: new Date(filters["startDate"]),
+            endDate: new Date(filters["endDate"])
+        })
+    }
 
     const handleFiltering = async () => {
         const filters = {
-            "startDate": range.startDate ? range.startDate.toLocaleString() : "",
-            "endDate": range.endDate ? range.endDate.toLocaleString() : "",
+            "startDate": range.startDate,
+            "endDate": range.endDate,
             "radius": distance,
-            "selectedTags": selectedTags,
+            "tags": selectedTags,
             "onlyFavourites": onlyFavourites,
             "isFree": onlyFree
         };
@@ -54,7 +53,6 @@ export function FiltersScreen({ navigation }) {
         await saveFilters(filters);
         navigation.goBack();
     }
-
 
     const [open, setOpen] = React.useState(false);
 
@@ -73,7 +71,10 @@ export function FiltersScreen({ navigation }) {
     return (
         <ScrollView scrollEnabled={true} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FormView style={{ width: '80%', marginTop: 40, marginBottom: 40 }}>
-                <FormText title="Choose filters"/>
+                <View style={styles.propertyContainer}>
+                    <FormText title="Choose filters"/>
+                    <IconButton icon={ faRefresh } onPress={() => resetFilters().then(() => loadFilters())} />
+                </View>
 
                 <FormText title="Date"/>
                 <View style={styles.propertyContainer}>

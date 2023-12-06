@@ -31,6 +31,24 @@ export async function saveFilters(filters) {
     }
 }
 
+export async function resetFilters() {
+    let today = new Date();
+    let tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    try {
+        await AsyncStorage.setItem('filters', JSON.stringify({
+            "startDate": today,
+            "endDate": tomorrow,
+            "radius": 2,
+            "tags": [],
+            "onlyFavourites": false,
+            "isFree": false
+        }));
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export async function getFilters() {
     try {
         return await AsyncStorage.getItem('filters');
