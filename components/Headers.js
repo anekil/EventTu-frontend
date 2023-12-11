@@ -16,15 +16,15 @@ export const HeaderAppName = props => {
 export const HeaderAuthorized = props => {
     return (
         <View style={{...styles.headerContainer, ...styles.blackBorder, ...props.style}}>
-            <HeaderButton title={"Logout"} style={{margin:10}} />
-            <IconButton icon={ faUser} style={{ alignSelf: 'center', marginEnd: 30 }} onPress={() => props.navigation.navigate('Profile')} />
+            { props.children }
+            <IconButton icon={ faUser} style={{ alignSelf: 'center' }} onPress={() => props.navigation.navigate('Profile')} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     headerContainer: {
-        justifyContent: "space-between",
+        justifyContent: "space-around",
         flexDirection: "row",
         backgroundColor: colors.primary_dark,
         marginTop: 40,

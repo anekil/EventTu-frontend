@@ -21,12 +21,14 @@ import {faFileImage} from "@fortawesome/free-solid-svg-icons/faFileImage";
 import { Container } from "../utils/ContainerEnum";
 import { getUserData } from "../utils/Storage";
 import { LoadingIndicator } from '../components/LoadingIndicator';
+import {uploadToDropbox} from "../utils/DropboxCommunication";
 
 export function EventDetailsScreen({ navigation }) {
     const [title, setTitle] = React.useState('');
     const [eventLink, setEventLink] = React.useState('');
     const [selectedTags, setSelectedTags] = React.useState([]);
     const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
     const [textValue, setTextValue] = React.useState('');
     const [location, setLocation] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
@@ -92,10 +94,12 @@ export function EventDetailsScreen({ navigation }) {
             allowsEditing: true,
             aspect: [1, 1],
             quality: 1,
+            base64: false,
         });
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            setImage(result.uri);
+            await uploadToDropbox(image).then((url) => setImageUrl(url));
         }
     };
 

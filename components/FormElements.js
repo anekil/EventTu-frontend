@@ -111,7 +111,6 @@ export const TagsPicker = props => {
               styleSelectorContainer={ styles.formTextInputLike }
               styleDropdownMenuSubsection={ styles.formTextInputLike }
           />
-          {props.selectedTags && <Text>Selected: {props.selectedTags.join(', ')}</Text>}
       </>
     );
 }

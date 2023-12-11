@@ -7,19 +7,38 @@ import { getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import ExampleImage from "../assets/example.png";
 import { LoadingIndicator } from './LoadingIndicator';
+import {Role} from "../utils/RoleEnum";
 
 export function EventMini(props) {
+    const [role, setRole] = React.useState(null);
+
+    // Loading user data
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const data = await getUserData(Container.ROLE);
+                setRole(JSON.parse(data));
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        })();
+    }, []);
+    // show loading if user data not ready
+    if (!role) { return <LoadingIndicator/>; }
+
     return (
-        <Pressable style={{ ...styles.eventCard, flex: 1, justifyContent: 'center' }} onPress={props.onPress}>
-            <View style={{ flexDirection: 'row' }}>
-                <ImageWithStar style={{ width: '50%' }} />
-                <View>
-                    <PrimaryButton title={props.eventData.name} />
-                        <FlatList data={props.eventData.tags}
-                            renderItem={({item}) => (
-                                <TagChip title={item} />
-                            )}
-                        />
+        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center'}} onPress={props.onPress}>
+            <View style={{flexDirection: 'row'}}>
+                { role === Role.ATTENDEE
+                    ? <ImageWithStar style={{width: '50%'}}/>
+                    : <ImageWithoutStar style={{width: '50%'}}/> }
+                <View style={{alignItems: "center",}}>
+                    <PrimaryButton title={props.eventData.name}/>
+                    <FlatList data={props.eventData.tags}
+                              renderItem={({item}) => (
+                                  <TagChip title={item}/>
+                              )}
+                    />
                 </View>
             </View>
         </Pressable>
@@ -45,27 +64,32 @@ const ImageWithoutStar = (props) => {
 
 export const EventDetails = (props) => {
     const [activeAvailEvent, setActiveAvailEvent] = React.useState(null);
-
+    const [role, setRole] = React.useState(null);
     // Loading user data
     React.useEffect(() => {
         (async () => {
             try {
-                const data = await getUserData(Container.AVAIL_ACTIVE_EVENT);
+                let data = await getUserData(Container.AVAIL_ACTIVE_EVENT);
                 const parsedData = JSON.parse(data);
                 setActiveAvailEvent(parsedData);
+                data = await getUserData(Container.ROLE);
+                setRole(JSON.parse(data));
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         })();
     },[]);
-    if (activeAvailEvent === null) { return <LoadingIndicator/>; }
+
+    if (activeAvailEvent === null || !role) { return <LoadingIndicator/>; }
 
     return (
         <View style={ styles.detailsContainer } >
             <ScrollView scrollEnabled={true} >
             <PrimaryButton title={activeAvailEvent.name} />
             <View >
-                <ImageWithStar />
+                { role === Role.ATTENDEE
+                    ? <ImageWithStar />
+                    : <ImageWithoutStar /> }
             </View>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
                 {activeAvailEvent.tags.map((title, index) => (
@@ -92,7 +116,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.form_white,
         borderWidth: 2,
         borderColor: colors.extra_black,
-        marginBottom: 10
+        margin: 10,
+        overflow: "scroll",
     },
     detailsContainer: {
         borderRadius: 20,
