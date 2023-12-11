@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {FlatList, View } from 'react-native';
 import {HeaderAuthorized} from "../components/Headers";
-import {EventMini} from "../components/Events";
+import {EventMiniAtendee} from "../components/Events";
 import { Container } from "../utils/ContainerEnum";
 import { useIsFocused } from '@react-navigation/native';
 import { saveUserData, getUserData } from "../utils/Storage";
@@ -43,6 +43,10 @@ export function ListScreen({ navigation }) {
         navigation.navigate('Details')
     }
 
+    function handleFavourite(id) {
+
+    }
+
     return (
         <>
         <HeaderAuthorized navigation={navigation}>
@@ -55,8 +59,9 @@ export function ListScreen({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FlatList data={availEvents}
                       renderItem={({item}) => (
-                          <EventMini
+                          <EventMiniAtendee
                               onPress={() => onUserEventPress(item.id)}
+                              starOnPress{() => handleFavourite(item.id)}
                               eventData={item}
                           /> )
                       }

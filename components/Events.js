@@ -9,29 +9,29 @@ import ExampleImage from "../assets/example.png";
 import { LoadingIndicator } from './LoadingIndicator';
 import {Role} from "../utils/RoleEnum";
 
-export function EventMini(props) {
-    const [role, setRole] = React.useState(null);
-
-    // Loading user data
-    React.useEffect(() => {
-        (async () => {
-            try {
-                const data = await getUserData(Container.ROLE);
-                setRole(JSON.parse(data));
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        })();
-    }, []);
-    // show loading if user data not ready
-    if (!role) { return <LoadingIndicator/>; }
-
+export function EventMiniOrganizer(props) {
     return (
         <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center'}} onPress={props.onPress}>
             <View style={{flexDirection: 'row'}}>
-                { role === Role.ATTENDEE
-                    ? <ImageWithStar style={{width: '50%'}}/>
-                    : <ImageWithoutStar style={{width: '50%'}}/> }
+                <ImageWithoutStar style={{width: '50%'}}/>
+                <View style={{alignItems: "center",}}>
+                    <PrimaryButton title={props.eventData.name}/>
+                    <FlatList data={props.eventData.tags}
+                              renderItem={({item}) => (
+                                  <TagChip title={item}/>
+                              )}
+                    />
+                </View>
+            </View>
+        </Pressable>
+    );
+}
+
+export function EventMiniAtendee(props) {
+    return (
+        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center'}} onPress={props.onPress}>
+            <View style={{flexDirection: 'row'}}>
+                <ImageWithStar style={{width: '50%'}} starOnPress={props.starOnPress}/>
                 <View style={{alignItems: "center",}}>
                     <PrimaryButton title={props.eventData.name}/>
                     <FlatList data={props.eventData.tags}
@@ -49,7 +49,7 @@ const ImageWithStar = (props) => {
     return (
         <View style={{ ...styles.imageContainer, ...props.style }} >
             <Image style={ { ...styles.image }} source={ ExampleImage } resizeMode="contain" />
-            <StarButton style={styles.star} />
+            <StarButton style={styles.star} onPress={props.starOnPress}/>
         </View>
     );
 };
