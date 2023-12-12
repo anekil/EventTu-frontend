@@ -82,6 +82,9 @@ export const EventDetails = (props) => {
 
     if (activeAvailEvent === null || !role) { return <LoadingIndicator/>; }
 
+    console.log("herehere");
+    console.log(activeAvailEvent);
+
     return (
         <View style={ styles.detailsContainer } >
             <ScrollView scrollEnabled={true} >
@@ -92,8 +95,8 @@ export const EventDetails = (props) => {
                     : <ImageWithoutStar /> }
             </View>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
-                {activeAvailEvent.tags.map((title, index) => (
-                    <TagChip key={index} title={title} />
+                {activeAvailEvent.tags.map(item => (
+                    <TagChip key={item.id} title={item.name} />
                 ))}
             </View>
             <Pressable style={{flexDirection: 'row'}}>
