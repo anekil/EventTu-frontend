@@ -37,6 +37,7 @@ export const MapScreen = ({ navigation }) => {
     startDate: getFormattedDate(today),
     endDate: getFormattedDate(tomorrow)
   });
+  const [availEvents, setAvailEvents] = React.useState(null);
 
   // Location settings
   useEffect(() => {
@@ -121,6 +122,7 @@ export const MapScreen = ({ navigation }) => {
             console.log(response.data);
             saveUserData(Container.AVAIL_EVENTS, response.data);
             loadMarkersFromServer(response.data)
+            setAvailEvents(response.data);
           })
           .catch(error => {
             console.log(error);
@@ -128,6 +130,13 @@ export const MapScreen = ({ navigation }) => {
     });
   }
 
+  function onUserEventPress(eventName){
+    if(eventName)
+        saveUserData(Container.AVAIL_ACTIVE_EVENT, availEvents.find(event => event.name === eventName));
+    else
+        saveUserData(Container.AVAIL_ACTIVE_EVENT, "");
+    navigation.navigate('Details')
+  }
 
   return (
     <>
@@ -164,6 +173,7 @@ export const MapScreen = ({ navigation }) => {
                   key={marker.id}
                   coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
                   title={marker.title}
+                  onPress={() => onUserEventPress(marker.title)}
               />
           ))}
 

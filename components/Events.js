@@ -82,9 +82,6 @@ export const EventDetails = (props) => {
 
     if (activeAvailEvent === null || !role) { return <LoadingIndicator/>; }
 
-    console.log("herehere");
-    console.log(activeAvailEvent);
-
     return (
         <View style={ styles.detailsContainer } >
             <ScrollView scrollEnabled={true} >
