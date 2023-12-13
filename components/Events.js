@@ -36,7 +36,7 @@ export function EventMiniAtendee(props) {
                     <PrimaryButton title={props.eventData.name}/>
                     <FlatList data={props.eventData.tags}
                               renderItem={({item}) => (
-                                  <TagChip title={item}/>
+                                  <TagChip title={item.name}/>
                               )}
                     />
                 </View>
