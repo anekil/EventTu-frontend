@@ -31,7 +31,7 @@ export function EventMiniAtendee(props) {
     return (
         <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center'}} onPress={props.onPress}>
             <View style={{flexDirection: 'row'}}>
-                <ImageWithStar style={{width: '50%'}} starOnPress={props.starOnPress}/>
+                <ImageWithStar style={{width: '50%'}} event_id={props.eventData.id} favorite={props.eventData.isFavorite}/>
                 <View style={{alignItems: "center",}}>
                     <PrimaryButton title={props.eventData.name}/>
                     <FlatList data={props.eventData.tags}
@@ -49,7 +49,7 @@ const ImageWithStar = (props) => {
     return (
         <View style={{ ...styles.imageContainer, ...props.style }} >
             <Image style={ { ...styles.image }} source={ ExampleImage } resizeMode="contain" />
-            <StarButton style={styles.star} onPress={props.starOnPress}/>
+            <StarButton style={styles.star} event_id={props.event_id} pressed={props.favorite}/>
         </View>
     );
 };
@@ -88,7 +88,7 @@ export const EventDetails = (props) => {
             <PrimaryButton title={activeAvailEvent.name} />
             <View >
                 { role === Role.ATTENDEE
-                    ? <ImageWithStar />
+                    ? <ImageWithStar event_id={activeAvailEvent.id} favorite={activeAvailEvent.isFavorite} />
                     : <ImageWithoutStar /> }
             </View>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>

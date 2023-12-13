@@ -12,7 +12,7 @@ export function ListScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
     const onChangeSearch = query => setSearchQuery(query);
 
-    const [availEvents, setAvailEvents] = React.useState(null);
+    const [availEvents, setAvailEvents] = React.useState([]);
     const isFocused = useIsFocused();  // variable used to refresh a list of events
 
     // Loading user data
@@ -43,10 +43,6 @@ export function ListScreen({ navigation }) {
         navigation.navigate('Details')
     }
 
-    function handleFavourite(id) {
-
-    }
-
     return (
         <>
         <HeaderAuthorized navigation={navigation}>
@@ -61,7 +57,6 @@ export function ListScreen({ navigation }) {
                       renderItem={({item}) => (
                           <EventMiniAtendee
                               onPress={() => onUserEventPress(item.id)}
-                              starOnPress{() => handleFavourite(item.id)}
                               eventData={item}
                           /> )
                       }
