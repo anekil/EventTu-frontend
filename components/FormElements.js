@@ -1,4 +1,4 @@
-import {StyleSheet, View, Text, TextInput} from "react-native";
+import {StyleSheet, View, Text, TextInput, ScrollView} from "react-native";
 import * as React from "react";
 import colors from "../theme/Colors";
 import {PrimaryButton} from "./Buttons";
@@ -80,8 +80,6 @@ export const TagsPicker = props => {
             })
             .catch(error => {
                 console.log(error)
-                setTags(dummyAvailTags);
-                console.log(tags);
             });
     }
 
@@ -105,6 +103,7 @@ export const TagsPicker = props => {
               tagTextColor={colors.extra_black}
               styleSelectorContainer={ styles.formTextInputLike }
               styleDropdownMenuSubsection={ styles.formTextInputLike }
+              flatListProps={{ scrollEnabled: false }}
           />
       </>
     );
