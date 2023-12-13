@@ -50,6 +50,7 @@ export function EventDetailsScreen({ navigation }) {
                 const parsedUserData = JSON.parse(data2);
                 if(parsedData && parsedUserData){
                     setPin({"latitude": parsedData.latitude, "longitude": parsedData.longitude});
+                    console.log(parsedData.tags);
                     setSelectedTags(parsedData.tags);
                     setTitle(parsedData.name);
                     setTextValue(parsedData.description);
@@ -125,7 +126,7 @@ export function EventDetailsScreen({ navigation }) {
             "owner": userData.id,
             "latitude": pin.latitude,
             "longitude": pin.longitude,
-            "tags": selectedTags,
+            "tags": selectedTags.map(item => item.id),
             "startTime": "2023-11-27 20:30:25",
             "endTime": "2023-11-27 21:53:25",
         };
