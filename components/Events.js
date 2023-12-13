@@ -5,7 +5,6 @@ import colors from "../theme/Colors";
 import {faLink} from "@fortawesome/free-solid-svg-icons/faLink";
 import { getUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
-import ExampleImage from "../assets/example.png";
 import { LoadingIndicator } from './LoadingIndicator';
 import {Role} from "../utils/RoleEnum";
 import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
@@ -14,7 +13,7 @@ export function EventMiniOrganizer(props) {
     return (
         <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center'}} onPress={props.onPress}>
             <View style={{flexDirection: 'row'}}>
-                <ImageWithoutStar style={{width: '50%'}}/>
+                <ImageWithoutStar style={{width: '50%'}} image={props.eventData.tags[0].name}/>
                 <View style={{alignItems: "center",}}>
                     <PrimaryButton title={props.eventData.name}/>
                     <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
@@ -31,7 +30,7 @@ export function EventMiniOrganizer(props) {
 export function EventMiniAtendee(props) {
     return (
         <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center', alignItems: "center",}} onPress={props.onPress}>
-            <ImageWithStar style={{width: '50%'}} event_id={props.eventData.id} favorite={props.eventData.isFavorite}/>
+            <ImageWithStar style={{width: '50%'}} event_id={props.eventData.id} favorite={props.eventData.isFavorite} image={props.eventData.tags[0].name} />
             <PrimaryButton title={props.eventData.name}/>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
                 {props.eventData.tags.map((item) => (
@@ -42,10 +41,20 @@ export function EventMiniAtendee(props) {
     );
 }
 
+const images = {
+    concert: require('./images/concert.png'),
+    convention: require('./images/convention.png'),
+    lecture: require('./images/lecture.png'),
+    tournament: require('./images/tournament.png'),
+    festival: require('./images/festival.png'),
+    workshops: require('./images/workshops.png')
+}
+
+
 const ImageWithStar = (props) => {
     return (
         <View style={{ ...styles.imageContainer, ...props.style }} >
-            <Image style={ { ...styles.image }} source={ ExampleImage } resizeMode="contain" />
+            <Image style={ { ...styles.image }} source={images[props.image]} resizeMode="contain" />
             <StarButton style={styles.star} event_id={props.event_id} pressed={props.favorite}/>
         </View>
     );
@@ -54,7 +63,7 @@ const ImageWithStar = (props) => {
 const ImageWithoutStar = (props) => {
     return (
         <View style={{ ...styles.imageContainer, ...props.style }} >
-            <Image style={ { ...styles.image }} source={ ExampleImage } resizeMode="contain" />
+            <Image style={ { ...styles.image }} source={{uri: ('./images/' + props.image + '.png')}} resizeMode="contain" />
         </View>
     );
 };
@@ -86,8 +95,8 @@ export const EventDetails = () => {
             <PrimaryButton title={activeAvailEvent.name} />
             <View >
                 { role === Role.ATTENDEE
-                    ? <ImageWithStar event_id={activeAvailEvent.id} favorite={activeAvailEvent.isFavorite} />
-                    : <ImageWithoutStar /> }
+                    ? <ImageWithStar event_id={activeAvailEvent.id} favorite={activeAvailEvent.isFavorite} image={activeAvailEvent.tags[0].name}/>
+                    : <ImageWithoutStar image={activeAvailEvent.tags[0].name}/> }
             </View>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
                 {activeAvailEvent.tags.map((item) => (
