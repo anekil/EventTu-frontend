@@ -19,7 +19,6 @@ export function FiltersScreen({ navigation }) {
     const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
     const [distance, setDistance] = React.useState(2);
     const [selectedTags, setSelectedTags] = React.useState([]);
-    const [onlyFavourites, setOnlyFavourites] =  React.useState(false);
     const [onlyFree, setOnlyFree] =  React.useState(false);
 
     useEffect(() => {
@@ -32,7 +31,6 @@ export function FiltersScreen({ navigation }) {
         filters = JSON.parse(filters);
         setDistance(filters["radius"]);
         setSelectedTags(filters["tags"]);
-        setOnlyFavourites(filters["onlyFavourites"]);
         setOnlyFree(filters["isFree"]);
         setRange({
             startDate: new Date(filters["startDate"]),
@@ -46,7 +44,6 @@ export function FiltersScreen({ navigation }) {
             "endDate": range.endDate,
             "radius": distance,
             "tags": selectedTags,
-            "onlyFavourites": onlyFavourites,
             "isFree": onlyFree
         };
         console.log(filters);
@@ -112,17 +109,6 @@ export function FiltersScreen({ navigation }) {
 
                 <FormText title="Tags"/>
                 <TagsPicker selectedTags={ selectedTags } setSelectedTags={ setSelectedTags } />
-
-                <View style={styles.propertyContainer}>
-                    <FormText title="Only favourites "/>
-                    <Checkbox
-                        status={onlyFavourites ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                            setOnlyFavourites(!onlyFavourites);
-                        }}
-                        color={colors.extra_black}
-                    />
-                </View>
 
                 <View style={styles.propertyContainer}>
                     <FormText title="Only free "/>

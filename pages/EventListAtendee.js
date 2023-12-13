@@ -6,7 +6,10 @@ import { Container } from "../utils/ContainerEnum";
 import { useIsFocused } from '@react-navigation/native';
 import { saveUserData, getUserData } from "../utils/Storage";
 import { LoadingIndicator } from '../components/LoadingIndicator';
-import {Searchbar} from "react-native-paper";
+import {FloatingButton, IconButton} from "../components/Buttons";
+import {faStar} from "@fortawesome/free-solid-svg-icons/faStar";
+import {faStar as faFullStar} from "@fortawesome/free-regular-svg-icons/faStar";
+import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
 
 export function ListScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -14,6 +17,8 @@ export function ListScreen({ navigation }) {
 
     const [availEvents, setAvailEvents] = React.useState([]);
     const isFocused = useIsFocused();  // variable used to refresh a list of events
+
+    const [showFavorites, setShowFavorites] = React.useState(false);
 
     // Loading user data
     React.useEffect(() => {
@@ -46,11 +51,7 @@ export function ListScreen({ navigation }) {
     return (
         <>
         <HeaderAuthorized navigation={navigation}>
-            <Searchbar
-                placeholder="Search"
-                onChangeText={onChangeSearch}
-                value={searchQuery}
-            />
+            <IconButton icon={ showFavorites ? faStar : faFullStar } style={{ alignSelf: 'center' }} onPress={() => setShowFavorites(!showFavorites)} />
         </HeaderAuthorized>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FlatList data={availEvents}
@@ -61,6 +62,10 @@ export function ListScreen({ navigation }) {
                           /> )
                       }
             />
+            { showFavorites
+                ? <></>
+                : <FloatingButton icon={ faFilter } onPress={() => navigation.navigate('Filters')} />
+            }
         </View>
         </>
     );
