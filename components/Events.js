@@ -8,6 +8,7 @@ import { Container } from "../utils/ContainerEnum";
 import ExampleImage from "../assets/example.png";
 import { LoadingIndicator } from './LoadingIndicator';
 import {Role} from "../utils/RoleEnum";
+import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
 
 export function EventMiniOrganizer(props) {
     return (
@@ -16,11 +17,11 @@ export function EventMiniOrganizer(props) {
                 <ImageWithoutStar style={{width: '50%'}}/>
                 <View style={{alignItems: "center",}}>
                     <PrimaryButton title={props.eventData.name}/>
-                    <FlatList data={props.eventData.tags}
-                              renderItem={({item}) => (
-                                  <TagChip title={item}/>
-                              )}
-                    />
+                    <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
+                        {props.eventData.tags.map((item) => (
+                            <TagChip key={item.id} title={item.name} />
+                        ))}
+                    </View>
                 </View>
             </View>
         </Pressable>
@@ -29,17 +30,13 @@ export function EventMiniOrganizer(props) {
 
 export function EventMiniAtendee(props) {
     return (
-        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center'}} onPress={props.onPress}>
-            <View style={{flexDirection: 'row'}}>
-                <ImageWithStar style={{width: '50%'}} event_id={props.eventData.id} favorite={props.eventData.isFavorite}/>
-                <View style={{alignItems: "center",}}>
-                    <PrimaryButton title={props.eventData.name}/>
-                    <FlatList data={props.eventData.tags}
-                              renderItem={({item}) => (
-                                  <TagChip title={item.name}/>
-                              )}
-                    />
-                </View>
+        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center', alignItems: "center",}} onPress={props.onPress}>
+            <ImageWithStar style={{width: '50%'}} event_id={props.eventData.id} favorite={props.eventData.isFavorite}/>
+            <PrimaryButton title={props.eventData.name}/>
+            <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
+                {props.eventData.tags.map((item) => (
+                    <TagChip key={item.id} title={item.name} />
+                ))}
             </View>
         </Pressable>
     );
@@ -62,7 +59,7 @@ const ImageWithoutStar = (props) => {
     );
 };
 
-export const EventDetails = (props) => {
+export const EventDetails = () => {
     const [activeAvailEvent, setActiveAvailEvent] = React.useState(null);
     const [role, setRole] = React.useState(null);
     // Loading user data
@@ -81,6 +78,7 @@ export const EventDetails = (props) => {
     },[]);
 
     if (activeAvailEvent === null || !role) { return <LoadingIndicator/>; }
+    const dateOptions = {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'};
 
     return (
         <View style={ styles.detailsContainer } >
@@ -92,14 +90,20 @@ export const EventDetails = (props) => {
                     : <ImageWithoutStar /> }
             </View>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
-                {activeAvailEvent.tags.map((title, index) => (
-                    <TagChip key={index} title={title} />
+                {activeAvailEvent.tags.map((item) => (
+                    <TagChip key={item.id} title={item.name} />
                 ))}
             </View>
-            <Pressable style={{flexDirection: 'row'}}>
-                <Text style={styles.text}>Link do wydarzenia</Text>
-                <IconButton icon={ faLink } />
-            </Pressable>
+            {/*<Pressable style={{flexDirection: 'row'}}>*/}
+            {/*    <Text style={styles.text}>Link do wydarzenia</Text>*/}
+            {/*    <IconButton icon={ faLink } />*/}
+            {/*</Pressable>*/}
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <IconButton icon={ faCalendar } />
+                { activeAvailEvent.startTime
+                    ? <Text style={styles.text}>{new Date(activeAvailEvent.startTime).toLocaleString([], dateOptions)} - {new Date(activeAvailEvent.endTime).toLocaleString([], dateOptions)}</Text>
+                    : <></> }
+            </View>
 
             <View style={styles.descriptionContainer} >
                 <Text>{activeAvailEvent.description}</Text>
@@ -112,7 +116,7 @@ export const EventDetails = (props) => {
 const styles = StyleSheet.create({
     eventCard: {
         borderRadius: 20,
-        padding: 12,
+        padding: 4,
         backgroundColor: colors.form_white,
         borderWidth: 2,
         borderColor: colors.extra_black,
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colors.extra_black,
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: "800",
         marginBottom: 10,
     }

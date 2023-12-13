@@ -21,7 +21,7 @@ export const PrimaryButton = props => {
 export const HeaderButton = props => {
     return (
         <Pressable style={{...styles.blackBorder, ...styles.headerButton, ...props.style}} onPress = {props.onPress}>
-            <Text style={{...styles.buttonText, ...styles.headerText}}>{props.title}</Text>
+            <Text style={{...styles.buttonText, ...styles.headerText, fontSize: 14}}>{props.title}</Text>
         </Pressable>
     );
 }
@@ -50,12 +50,15 @@ export const StarButton = props => {
     const [pressed, setPressed] = useState(props.pressed);
 
     function onPress(){
+        console.log("checking if favorite")
         if(pressed){
+            console.log("deleting")
             axios.delete(sendTo("favorites/" + props.event_id))
                 .catch(error => {
                     console.log(error);
                 });
         } else {
+            console.log("posting")
             axios.post(sendTo("favorites/" + props.event_id))
                 .catch(error => {
                     console.log(error);
