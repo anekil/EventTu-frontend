@@ -10,6 +10,9 @@ import {FloatingButton, IconButton} from "../components/Buttons";
 import {faStar} from "@fortawesome/free-solid-svg-icons/faStar";
 import {faStar as faFullStar} from "@fortawesome/free-regular-svg-icons/faStar";
 import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
+import axios from "axios";
+import {sendTo} from "../utils/Links";
+import {FormText} from "../components/FormElements";
 
 export function ListScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -22,19 +25,27 @@ export function ListScreen({ navigation }) {
 
     // Loading user data
     React.useEffect(() => {
-      (async () => {
-          if(isFocused){
+        const fetchData = async () => {
             try {
-                const data = await getUserData(Container.AVAIL_EVENTS);
-                console.log(data)
-                const parsedData = JSON.parse(data);
-                setAvailEvents(parsedData);
+                if (isFocused) {
+                    if (showFavorites) {
+                        const response = await axios.get(sendTo("favorites"));
+                        console.log("favorites:" + JSON.stringify(response.data));
+                        setAvailEvents(response.data);
+                    } else {
+                        const data = await getUserData(Container.AVAIL_EVENTS);
+                        console.log(data);
+                        const parsedData = JSON.parse(data);
+                        setAvailEvents(parsedData);
+                    }
+                }
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
-          }
-      })();
-    }, [isFocused]);
+        };
+
+        fetchData();
+    }, [isFocused, showFavorites]);
     // show loading if user data not ready
     if (!availEvents) { return <LoadingIndicator/>; }
   
@@ -54,14 +65,18 @@ export function ListScreen({ navigation }) {
             <IconButton icon={ showFavorites ? faStar : faFullStar } style={{ alignSelf: 'center' }} onPress={() => setShowFavorites(!showFavorites)} />
         </HeaderAuthorized>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <FlatList data={availEvents}
-                      renderItem={({item}) => (
-                          <EventMiniAtendee
-                              onPress={() => onUserEventPress(item.id)}
-                              eventData={item}
-                          /> )
-                      }
-            />
+            { availEvents.length > 0
+                ? <FlatList data={availEvents}
+                            renderItem={({item}) => (
+                                <EventMiniAtendee
+                                    onPress={() => onUserEventPress(item.id)}
+                                    eventData={item}
+                                /> )
+                            }
+                />
+                : <FormText title="no events found" />
+            }
+
             { showFavorites
                 ? <></>
                 : <FloatingButton icon={ faFilter } onPress={() => navigation.navigate('Filters')} />
