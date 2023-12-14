@@ -50,25 +50,24 @@ export const StarButton = props => {
     const [pressed, setPressed] = useState(props.pressed);
 
     const updateIsFavoriteById = (data, eventId, isFavoriteValue) => {
-        const index = data.findIndex(event => event.id === eventId);
-        if (index !== -1) {
-            const updatedData = [...data];
-            updatedData[index] = { ...updatedData[index], isFavorite: isFavoriteValue };
-            return updatedData;
-        }
-        return data;
+        return data.map(event => {
+            if (event.id === eventId) {
+                return { ...event, isFavorite: isFavoriteValue !== null ? isFavoriteValue : false };
+            }
+            return event;
+        });
     };
 
     async function onPress() {
         console.log("checking if favorite")
         if (pressed) {
-            console.log("deleting")
+            console.log("deleting: " + "favorites/" + props.event_id)
             axios.delete(sendTo("favorites/" + props.event_id))
                 .catch(error => {
                     console.log(error);
                 });
         } else {
-            console.log("posting")
+            console.log("posting: " + "favorites/" + props.event_id)
             axios.post(sendTo("favorites/" + props.event_id))
                 .catch(error => {
                     console.log(error);
@@ -83,7 +82,7 @@ export const StarButton = props => {
     }
 
     return (
-        <Pressable style={{ width: 50, height: 50, ...props.style }} onPress = { () => onPress() }>
+        <Pressable style={{ width: 50, height: 50, ...props.style }} onPress = { async () => await onPress() }>
             <View style={{ ...styles.centerContent, position: 'relative' }}>
                 <FontAwesomeIcon icon={ faStar } size={ 46 } style={{ zIndex: 1, color: pressed ? colors.secondary : colors.extra_white, position: 'absolute', top: 0, left: 0 }} />
                 <FontAwesomeIcon icon={ faFullStar } size={ 48 } style={{ zIndex: 2, position: 'absolute', top: 0, left: 0 }}/>

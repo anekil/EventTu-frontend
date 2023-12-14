@@ -54,7 +54,7 @@ const images = {
 const ImageWithStar = (props) => {
     return (
         <View style={{ ...styles.imageContainer, ...props.style }} >
-            <Image style={ { ...styles.image }} source={images[props.image]} resizeMode="contain" />
+            <Image style={ { ...styles.image }} source={images[props.image] ? images[props.image] : images["festival"] } resizeMode="contain" />
             <StarButton style={styles.star} event_id={props.event_id} pressed={props.favorite}/>
         </View>
     );
