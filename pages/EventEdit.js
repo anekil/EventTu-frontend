@@ -1,7 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
-import {useState} from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {
@@ -15,20 +14,46 @@ import {
 import { InfoPopup } from '../components/InfoModal';
 import colors from "../theme/Colors";
 import { sendTo } from '../utils/Links';
-import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "../components/Buttons";
-import {faFileImage} from "@fortawesome/free-solid-svg-icons/faFileImage";
 import { Container } from "../utils/ContainerEnum";
 import { getUserData } from "../utils/Storage";
 import { LoadingIndicator } from '../components/LoadingIndicator';
-import {uploadToDropbox} from "../utils/DropboxCommunication";
+import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
+import { TimePickerModal, DatePickerModal } from "react-native-paper-dates";
+
+const formatDate = (date) => {
+    const pad = (num) => (num < 10 ? '0' + num : num);
+  
+    let year = date.getFullYear();
+    let month = pad(date.getMonth() + 1); // getMonth() returns month from 0-11
+    let day = pad(date.getDate());
+  
+    let hours = pad(date.getHours());
+    let minutes = pad(date.getMinutes());
+    let seconds = pad(date.getSeconds());
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
 
 export function EventDetailsScreen({ navigation }) {
+    const [range, setRange] = React.useState({ startDate: null, endDate: null });
+    const [open, setOpen] = React.useState(false);
+    const onDismiss = React.useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+    const onConfirm = React.useCallback(
+        ({ startDate, endDate }) => {
+            setOpen(false);
+            setRange({ startDate, endDate });
+            setStartDate(formatDate(startDate));
+            setEndDate(formatDate(endDate));
+        },
+        [setOpen, setRange]
+    );
+
     const [title, setTitle] = React.useState('');
     const [eventLink, setEventLink] = React.useState('');
     const [selectedTags, setSelectedTags] = React.useState([]);
-    const [image, setImage] = useState(null);
-    const [imageUrl, setImageUrl] = useState(null);
     const [textValue, setTextValue] = React.useState('');
     const [location, setLocation] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
@@ -39,6 +64,11 @@ export function EventDetailsScreen({ navigation }) {
     const [pin, setPin] = React.useState(null);
     const [activeOwnerEvent, setActiveOwnerEvent] = React.useState(null);
     const [userData, setUserData] = React.useState(null);
+
+    const [startDate, setStartDate] = React.useState(null);
+    const [endDate, setEndDate] = React.useState(null);
+    const [startTime, setStartTime] = React.useState(null);
+    const [endTime, setEndTime] = React.useState(null);
 
     // Loading user data
     React.useEffect(() => {
@@ -53,6 +83,8 @@ export function EventDetailsScreen({ navigation }) {
                     console.log(parsedData.tags);
                     setSelectedTags(parsedData.tags);
                     setTitle(parsedData.name);
+                    setStartDate(parsedData.startTime);
+                    setEndDate(parsedData.endTime);
                     setTextValue(parsedData.description);
                 }
                 setActiveOwnerEvent(parsedData);
@@ -88,22 +120,6 @@ export function EventDetailsScreen({ navigation }) {
     console.log("active event: " + JSON.stringify(activeOwnerEvent));
     console.log("type of active event: " + JSON.stringify(typeof activeOwnerEvent));
 
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-            base64: false,
-        });
-
-        if (!result.canceled) {
-            setImage(result.uri);
-            await uploadToDropbox(image).then((url) => setImageUrl(url));
-        }
-    };
-
     const handleLongPress = (event) => {
         console.log(event.nativeEvent.coordinate);
         setPin(event.nativeEvent.coordinate);
@@ -119,6 +135,7 @@ export function EventDetailsScreen({ navigation }) {
     }
 
     function prepareEventRequest(){
+        console.log(startDate);
         return {
             "name": title,
             "free": true,
@@ -127,8 +144,8 @@ export function EventDetailsScreen({ navigation }) {
             "latitude": pin.latitude,
             "longitude": pin.longitude,
             "tags": selectedTags.map(item => item.id),
-            "startTime": "2023-11-27 20:30:25",
-            "endTime": "2023-11-27 21:53:25",
+            "startTime": startDate,
+            "endTime": endDate,
         };
     }
 
@@ -179,6 +196,9 @@ export function EventDetailsScreen({ navigation }) {
         navigation.navigate('OrganizerEvents');
     };
 
+
+    
+
     return (
         <ScrollView scrollEnabled={true} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
             <FormView style={{ width: '80%', marginTop: 40, marginBottom: 40 }}>
@@ -202,12 +222,23 @@ export function EventDetailsScreen({ navigation }) {
                 <FormText title="Tags"/>
                 <TagsPicker selectedTags={ selectedTags } setSelectedTags={ setSelectedTags } />
 
-                <FormText title="Image"/>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <IconButton icon={ faFileImage } onPress={pickImage} />
-                    {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                <FormText title="Date"/>
+                <View style={styles.propertyContainer}>
+                    <IconButton icon={ faCalendar } onPress={() => setOpen(true)}  />
+                    { startDate
+                        ? <Text>{startDate.split(" ")[0]} - {endDate.split(" ")[0]}</Text>
+                        : <></> }
                 </View>
-
+                <DatePickerModal
+                    locale="en"
+                    mode="range"
+                    visible={open}
+                    onDismiss={onDismiss}
+                    startDate={range.startDate}
+                    endDate={range.endDate}
+                    onConfirm={onConfirm}
+                />
+                
                 <FormText title="Description"/>
                 <FormMultiLineInput
                     onChangeText={text => setTextValue(text)}
@@ -282,11 +313,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
-    image: {
-      width: 300,
-      height: 300,
-      marginTop: 20,
-    },
     textArea: {
         height: 100, // Set the height
         borderColor: 'gray', // Set border color
@@ -303,5 +329,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         backgroundColor: colors.extra_white,
+    },
+    propertyContainer: {
+        flexDirection: "row",
+        alignItems: 'center'
     }
   });
