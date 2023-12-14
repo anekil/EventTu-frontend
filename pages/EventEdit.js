@@ -19,7 +19,7 @@ import { Container } from "../utils/ContainerEnum";
 import { getUserData } from "../utils/Storage";
 import { LoadingIndicator } from '../components/LoadingIndicator';
 import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
-import { TimePickerModal, DatePickerModal } from "react-native-paper-dates";
+import { DatePickerModal } from "react-native-paper-dates";
 
 const formatDate = (date) => {
     const pad = (num) => (num < 10 ? '0' + num : num);
@@ -67,8 +67,6 @@ export function EventDetailsScreen({ navigation }) {
 
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
-    const [startTime, setStartTime] = React.useState(null);
-    const [endTime, setEndTime] = React.useState(null);
 
     // Loading user data
     React.useEffect(() => {
@@ -276,7 +274,7 @@ export function EventDetailsScreen({ navigation }) {
                     {activeOwnerEvent && (
                         <>
                             <SubmitButton title="Update Event" onPress={() => handleEvent(true)} />
-                            <SubmitButton title="Delete Event" onPress={deleteEvent} />
+                            <SubmitButton title="Delete Event" onPress={deleteEvent} style={{ backgroundColor: colors.error }} />
                         </>
                     )}
                 </View>

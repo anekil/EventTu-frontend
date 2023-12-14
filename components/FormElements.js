@@ -59,7 +59,7 @@ export const FormLink = props => {
 export const SubmitButton = props => {
     return (
         <View style={{alignItems: 'center', justifyContent: 'center',}}>
-            <PrimaryButton style={{"marginTop": 20, "marginBottom": 10}} title={props.title} onPress={props.onPress} />
+            <PrimaryButton style={{...props.style, marginTop: 20, marginBottom: 10}} title={props.title} onPress={props.onPress} />
         </View>
     );
 }

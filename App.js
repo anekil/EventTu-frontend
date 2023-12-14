@@ -45,7 +45,6 @@ export default function App() {
               <Stack.Screen name="Browse Events" component={EventsNavigator} options={{orientation: 'default'}}/>
               <Stack.Screen name="Filters" component={FiltersScreen} options={{orientation: 'default'}}/>
               <Stack.Screen name="Details" component={DetailsScreen} options={{orientation: 'default'}} />
-              <Stack.Screen name="Mutable Details" component={MutableDetailsScreen} options={{orientation: 'default'}} />
               <Stack.Screen name="OrganizerEvents" component={OrganizerEventsScreen} options={{orientation: 'default'}}/>
               <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{orientation: 'default'}}/>
               <Stack.Screen name="Profile" component={ProfileScreen} options={{orientation: 'default'}}/>

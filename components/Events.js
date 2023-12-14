@@ -12,7 +12,7 @@ import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
 export function EventMiniOrganizer(props) {
     return (
         <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center', alignItems: "center",}} onPress={props.onPress}>
-            <ImageWithoutStar style={{width: '50%'}} event_id={props.eventData.id} favorite={props.eventData.isFavorite} image={props.eventData.tags[0].name} />
+            <ImageWithoutStar style={{width: '50%'}} />
             <PrimaryButton title={props.eventData.name}/>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
                 {props.eventData.tags.map((item) => (
@@ -99,10 +99,7 @@ export const EventDetails = () => {
                     <TagChip key={item.id} title={item.name} />
                 ))}
             </View>
-            {/*<Pressable style={{flexDirection: 'row'}}>*/}
-            {/*    <Text style={styles.text}>Link do wydarzenia</Text>*/}
-            {/*    <IconButton icon={ faLink } />*/}
-            {/*</Pressable>*/}
+
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <IconButton icon={ faCalendar } />
                 { activeAvailEvent.startTime
@@ -113,6 +110,11 @@ export const EventDetails = () => {
             <View style={styles.descriptionContainer} >
                 <Text>{activeAvailEvent.description}</Text>
             </View>
+
+            <Pressable style={{flexDirection: 'row'}}>
+                <Text style={styles.text}>Link do wydarzenia</Text>
+                <IconButton icon={ faLink } />
+            </Pressable>
             </ScrollView>
         </View>
     );
