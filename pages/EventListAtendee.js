@@ -30,8 +30,9 @@ export function ListScreen({ navigation }) {
                 if (isFocused) {
                     if (showFavorites) {
                         const response = await axios.get(sendTo("favorites"));
-                        console.log("favorites:" + JSON.stringify(response.data));
-                        setAvailEvents(response.data);
+                        const updatedData = response.data.map(event => {return { ...event, isFavorite: true };});
+                        console.log("favorites:" + JSON.stringify(updatedData));
+                        setAvailEvents(updatedData);
                     } else {
                         const data = await getUserData(Container.AVAIL_EVENTS);
                         console.log(data);
@@ -59,6 +60,8 @@ export function ListScreen({ navigation }) {
         navigation.navigate('Details')
     }
 
+    const [refresh, setRefresh] = React.useState(false);
+
     return (
         <>
         <HeaderAuthorized navigation={navigation}>
@@ -67,6 +70,8 @@ export function ListScreen({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             { availEvents.length > 0
                 ? <FlatList data={availEvents}
+                            extraData={refresh}
+                            onPress={()=>{setRefresh(!refresh)}}
                             renderItem={({item}) => (
                                 <EventMiniAtendee
                                     onPress={() => onUserEventPress(item.id)}
@@ -75,11 +80,6 @@ export function ListScreen({ navigation }) {
                             }
                 />
                 : <FormText title="no events found" />
-            }
-
-            { showFavorites
-                ? <></>
-                : <FloatingButton icon={ faFilter } onPress={() => navigation.navigate('Filters')} />
             }
         </View>
         </>

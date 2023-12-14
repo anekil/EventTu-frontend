@@ -9,6 +9,7 @@ import axios from "axios";
 import {sendTo} from "../utils/Links";
 import {getUserData, saveUserData} from "../utils/Storage";
 import {Container} from "../utils/ContainerEnum";
+import {InfoPopup} from "./InfoModal";
 
 export const PrimaryButton = props => {
     return (
@@ -49,36 +50,36 @@ export const IconButton = props => {
 export const StarButton = props => {
     const [pressed, setPressed] = useState(props.pressed);
 
-    const updateIsFavoriteById = (data, eventId, isFavoriteValue) => {
-        return data.map(event => {
-            if (event.id === eventId) {
-                return { ...event, isFavorite: isFavoriteValue !== null ? isFavoriteValue : false };
+    async function updateSavedData(value) {
+        setPressed(value);
+        let loadedEvents = await getUserData(Container.AVAIL_EVENTS);
+        loadedEvents = JSON.parse(loadedEvents);
+        const updatedData = loadedEvents.map(event => {
+            if (event.id === props.event_id) {
+                return {...event, isFavorite: value};
             }
             return event;
         });
-    };
+        await saveUserData(Container.AVAIL_EVENTS, updatedData);
+    }
 
     async function onPress() {
         console.log("checking if favorite")
         if (pressed) {
             console.log("deleting: " + "favorites/" + props.event_id)
             axios.delete(sendTo("favorites/" + props.event_id))
+                .then(async () => await updateSavedData(false).then(() => console.log("saved")))
                 .catch(error => {
                     console.log(error);
                 });
         } else {
             console.log("posting: " + "favorites/" + props.event_id)
             axios.post(sendTo("favorites/" + props.event_id))
+                .then(async () => await updateSavedData(true).then(() => console.log("saved")))
                 .catch(error => {
                     console.log(error);
                 });
         }
-        setPressed(!pressed)
-
-        let loadedEvents = await getUserData(Container.AVAIL_EVENTS);
-        loadedEvents = JSON.parse(loadedEvents);
-        const updatedData = updateIsFavoriteById(loadedEvents, props.event_id, pressed);
-        await saveUserData(Container.AVAIL_EVENTS, updatedData);
     }
 
     return (
