@@ -9,7 +9,6 @@ import axios from "axios";
 import {sendTo} from "../utils/Links";
 import {getUserData, saveUserData} from "../utils/Storage";
 import {Container} from "../utils/ContainerEnum";
-import {InfoPopup} from "./InfoModal";
 
 export const PrimaryButton = props => {
     return (
