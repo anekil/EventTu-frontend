@@ -11,17 +11,13 @@ import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
 
 export function EventMiniOrganizer(props) {
     return (
-        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center'}} onPress={props.onPress}>
-            <View style={{flexDirection: 'row'}}>
-                <ImageWithoutStar style={{width: '50%'}} image={props.eventData.tags[0].name}/>
-                <View style={{alignItems: "center",}}>
-                    <PrimaryButton title={props.eventData.name}/>
-                    <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
-                        {props.eventData.tags.map((item) => (
-                            <TagChip key={item.id} title={item.name} />
-                        ))}
-                    </View>
-                </View>
+        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center', alignItems: "center",}} onPress={props.onPress}>
+            <ImageWithoutStar style={{width: '50%'}} event_id={props.eventData.id} favorite={props.eventData.isFavorite} image={props.eventData.tags[0].name} />
+            <PrimaryButton title={props.eventData.name}/>
+            <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
+                {props.eventData.tags.map((item) => (
+                    <TagChip key={item.id} title={item.name} />
+                ))}
             </View>
         </Pressable>
     );
@@ -63,7 +59,7 @@ const ImageWithStar = (props) => {
 const ImageWithoutStar = (props) => {
     return (
         <View style={{ ...styles.imageContainer, ...props.style }} >
-            <Image style={ { ...styles.image }} source={{uri: ('./images/' + props.image + '.png')}} resizeMode="contain" />
+            <Image style={ { ...styles.image }} source={images[props.image] ? images[props.image] : images["festival"] } resizeMode="contain" />
         </View>
     );
 };
