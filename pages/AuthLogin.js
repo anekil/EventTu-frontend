@@ -8,6 +8,7 @@ import { Role } from "../utils/RoleEnum";
 import { Container } from "../utils/ContainerEnum";
 import {saveUserData, getUserData, resetFilters} from "../utils/Storage";
 import { LoadingIndicator } from '../components/LoadingIndicator';
+import {HeaderButton} from "../components/Buttons";
 
 export function LoginScreen({ navigation }) {
     const [email, setEmail] = React.useState('test@test.com');
@@ -95,9 +96,7 @@ export function LoginScreen({ navigation }) {
                 />
 
                 <SubmitButton title="Login" onPress={handleLogin} />
-
-                <FormLink title="Don’t have an account yet?" onPress={() => navigation.navigate('Register')} />
-                <FormLink title="Forgot your password?" />
+                <HeaderButton title="Register" onPress={() => navigation.navigate('Register')} />
 
                 <InfoPopup
                     isVisible={isFailurePopupVisible}

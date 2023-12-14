@@ -4,7 +4,7 @@ import {FlatList, View } from 'react-native';
 import { FloatingButton } from "../components/Buttons"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {HeaderAuthorized} from "../components/Headers";
-import {EventMini} from "../components/Events";
+import {EventMiniOrganizer} from "../components/Events";
 import { saveUserData } from "../utils/Storage";
 import { Container } from "../utils/ContainerEnum";
 import { sendTo } from '../utils/Links';
@@ -58,7 +58,7 @@ export function OrganizerEventsScreen({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FlatList data={ownerEvents}
                       renderItem={({item}) => (
-                          <EventMini
+                          <EventMiniOrganizer
                               onPress={() => onOwnerEventPress(item.id)}
                               eventData={item}
                           /> )

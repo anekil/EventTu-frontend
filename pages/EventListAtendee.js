@@ -1,35 +1,52 @@
 import * as React from 'react';
 import {FlatList, View } from 'react-native';
 import {HeaderAuthorized} from "../components/Headers";
-import {EventMini} from "../components/Events";
+import {EventMiniAtendee} from "../components/Events";
 import { Container } from "../utils/ContainerEnum";
 import { useIsFocused } from '@react-navigation/native';
 import { saveUserData, getUserData } from "../utils/Storage";
 import { LoadingIndicator } from '../components/LoadingIndicator';
-import {Searchbar} from "react-native-paper";
+import {FloatingButton, IconButton} from "../components/Buttons";
+import {faStar} from "@fortawesome/free-solid-svg-icons/faStar";
+import {faStar as faFullStar} from "@fortawesome/free-regular-svg-icons/faStar";
+import {faFilter} from "@fortawesome/free-solid-svg-icons/faFilter";
+import axios from "axios";
+import {sendTo} from "../utils/Links";
+import {FormText} from "../components/FormElements";
 
 export function ListScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
     const onChangeSearch = query => setSearchQuery(query);
 
-    const [availEvents, setAvailEvents] = React.useState(null);
+    const [availEvents, setAvailEvents] = React.useState([]);
     const isFocused = useIsFocused();  // variable used to refresh a list of events
+
+    const [showFavorites, setShowFavorites] = React.useState(false);
 
     // Loading user data
     React.useEffect(() => {
-      (async () => {
-          if(isFocused){
+        const fetchData = async () => {
             try {
-                const data = await getUserData(Container.AVAIL_EVENTS);
-                console.log(data)
-                const parsedData = JSON.parse(data);
-                setAvailEvents(parsedData);
+                if (isFocused) {
+                    if (showFavorites) {
+                        const response = await axios.get(sendTo("favorites"));
+                        const updatedData = response.data.map(event => {return { ...event, isFavorite: true };});
+                        console.log("favorites:" + JSON.stringify(updatedData));
+                        setAvailEvents(updatedData);
+                    } else {
+                        const data = await getUserData(Container.AVAIL_EVENTS);
+                        console.log(data);
+                        const parsedData = JSON.parse(data);
+                        setAvailEvents(parsedData);
+                    }
+                }
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
-          }
-      })();
-    }, [isFocused]);
+        };
+
+        fetchData();
+    }, [isFocused, showFavorites]);
     // show loading if user data not ready
     if (!availEvents) { return <LoadingIndicator/>; }
   
@@ -43,24 +60,27 @@ export function ListScreen({ navigation }) {
         navigation.navigate('Details')
     }
 
+    const [refresh, setRefresh] = React.useState(false);
+
     return (
         <>
         <HeaderAuthorized navigation={navigation}>
-            <Searchbar
-                placeholder="Search"
-                onChangeText={onChangeSearch}
-                value={searchQuery}
-            />
+            <IconButton icon={ showFavorites ? faStar : faFullStar } style={{ alignSelf: 'center' }} onPress={() => setShowFavorites(!showFavorites)} />
         </HeaderAuthorized>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <FlatList data={availEvents}
-                      renderItem={({item}) => (
-                          <EventMini
-                              onPress={() => onUserEventPress(item.id)}
-                              eventData={item}
-                          /> )
-                      }
-            />
+            { availEvents.length > 0
+                ? <FlatList data={availEvents}
+                            extraData={refresh}
+                            onPress={()=>{setRefresh(!refresh)}}
+                            renderItem={({item}) => (
+                                <EventMiniAtendee
+                                    onPress={() => onUserEventPress(item.id)}
+                                    eventData={item}
+                                /> )
+                            }
+                />
+                : <FormText title="no events found" />
+            }
         </View>
         </>
     );
