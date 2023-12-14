@@ -7,7 +7,7 @@ import {faStar} from "@fortawesome/free-solid-svg-icons/faStar";
 import {faStar as faFullStar} from "@fortawesome/free-regular-svg-icons/faStar";
 import axios from "axios";
 import {sendTo} from "../utils/Links";
-import {saveUserData} from "../utils/Storage";
+import {getUserData, saveUserData} from "../utils/Storage";
 import {Container} from "../utils/ContainerEnum";
 
 export const PrimaryButton = props => {
@@ -49,9 +49,19 @@ export const IconButton = props => {
 export const StarButton = props => {
     const [pressed, setPressed] = useState(props.pressed);
 
-    function onPress(){
+    const updateIsFavoriteById = (data, eventId, isFavoriteValue) => {
+        const index = data.findIndex(event => event.id === eventId);
+        if (index !== -1) {
+            const updatedData = [...data];
+            updatedData[index] = { ...updatedData[index], isFavorite: isFavoriteValue };
+            return updatedData;
+        }
+        return data;
+    };
+
+    async function onPress() {
         console.log("checking if favorite")
-        if(pressed){
+        if (pressed) {
             console.log("deleting")
             axios.delete(sendTo("favorites/" + props.event_id))
                 .catch(error => {
@@ -65,6 +75,11 @@ export const StarButton = props => {
                 });
         }
         setPressed(!pressed)
+
+        let loadedEvents = await getUserData(Container.AVAIL_EVENTS);
+        loadedEvents = JSON.parse(loadedEvents);
+        const updatedData = updateIsFavoriteById(loadedEvents, props.event_id, pressed);
+        await saveUserData(Container.AVAIL_EVENTS, updatedData);
     }
 
     return (
