@@ -1,4 +1,4 @@
-import {StyleSheet, View, Text, TextInput} from "react-native";
+import {StyleSheet, View, Text, TextInput, ScrollView} from "react-native";
 import * as React from "react";
 import colors from "../theme/Colors";
 import {PrimaryButton} from "./Buttons";
@@ -65,17 +65,10 @@ export const SubmitButton = props => {
 }
 
 export const TagsPicker = props => {
-    const dummyAvailTags = [{"id":1,"name":"tag1"},{"id":2,"name":"tag2"},{"id":3,"name":"tag3"},{"id":4,"name":"tag4"},{"id":5,"name":"tag5"},{"id":6,"name":"tag6"},{"id":7,"name":"tag7"},{"id":8,"name":"tag8"},{"id":9,"name":"tag9"},{"id":10,"name":"tag10"}]
     const [tags, setTags] = React.useState([]);
-
-    const tagIdMap = dummyAvailTags.reduce((acc, tag) => {
-        acc[tag.name] = tag.id;
-        return acc;
-    }, {});
 
     useEffect(() => { 
         getTags();
-        props.setSelectedTags(props.selectedTags.map(tagName => tagIdMap[tagName]))
      }, []);
 
     const getTags = () => {
@@ -87,14 +80,14 @@ export const TagsPicker = props => {
             })
             .catch(error => {
                 console.log(error)
-                setTags(dummyAvailTags);
-                console.log(tags);
             });
     }
 
     const onSelectedItemsChange = (selectedItems) => {
         console.log(selectedItems);
-        props.setSelectedTags(selectedItems);
+        props.setSelectedTags(
+            selectedItems.map(id => tags.find(item => item.id === id))
+        );
     };
 
     return (
@@ -102,7 +95,7 @@ export const TagsPicker = props => {
           <MultiSelect
               uniqueKey="id"
               items={tags}
-              selectedItems={props.selectedTags}
+              selectedItems={props.selectedTags.map(item => item.id)}
               selectText="Pick Tags"
               onSelectedItemsChange={onSelectedItemsChange}
               displayKey="name"
@@ -110,6 +103,7 @@ export const TagsPicker = props => {
               tagTextColor={colors.extra_black}
               styleSelectorContainer={ styles.formTextInputLike }
               styleDropdownMenuSubsection={ styles.formTextInputLike }
+              flatListProps={{ scrollEnabled: false }}
           />
       </>
     );

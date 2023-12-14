@@ -99,7 +99,7 @@ export const EventDetails = () => {
                     : <ImageWithoutStar image={activeAvailEvent.tags[0].name}/> }
             </View>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
-                {activeAvailEvent.tags.map((item) => (
+                {activeAvailEvent.tags.map(item => (
                     <TagChip key={item.id} title={item.name} />
                 ))}
             </View>
