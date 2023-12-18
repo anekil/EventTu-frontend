@@ -6,7 +6,6 @@ import { HomeScreen } from "./pages/Home";
 import { RegisterScreen } from "./pages/AuthRegister";
 import { LoginScreen } from "./pages/AuthLogin";
 import { MapScreen } from "./pages/Map";
-import { HeaderButton } from "./components/Buttons";
 import {FiltersScreen} from "./pages/Filters";
 import {OrganizerEventsScreen} from "./pages/EventListOrganizer";
 import {EventDetailsScreen} from "./pages/EventEdit";
@@ -15,9 +14,11 @@ import colors from "./theme/Colors";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faMap} from "@fortawesome/free-solid-svg-icons/faMap";
 import {faList} from "@fortawesome/free-solid-svg-icons/faList";
-import {DetailsScreen, MutableDetailsScreen} from "./pages/EventDetails";
+import {DetailsScreen} from "./pages/EventDetails";
 import {ProfileScreen} from "./pages/Profile";
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 

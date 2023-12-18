@@ -11,8 +11,8 @@ import {faCalendar} from "@fortawesome/free-solid-svg-icons/faCalendar";
 
 export function EventMiniOrganizer(props) {
     return (
-        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center', alignItems: "center",}} onPress={props.onPress}>
-            <ImageWithoutStar style={{width: '50%'}} />
+        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center', alignItems: "center"}} onPress={props.onPress}>
+            <ImageWithoutStar style={{width: '50%'}} image={props.eventData.tags[0].name} />
             <PrimaryButton title={props.eventData.name}/>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
                 {props.eventData.tags.map((item) => (
@@ -25,7 +25,7 @@ export function EventMiniOrganizer(props) {
 
 export function EventMiniAtendee(props) {
     return (
-        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center', alignItems: "center",}} onPress={props.onPress}>
+        <Pressable style={{...styles.eventCard, flex: 1, justifyContent: 'center', alignItems: "center"}} onPress={props.onPress}>
             <ImageWithStar style={{width: '50%'}} event_id={props.eventData.id} favorite={props.eventData.isFavorite} image={props.eventData.tags[0].name} />
             <PrimaryButton title={props.eventData.name}/>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>

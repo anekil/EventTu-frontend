@@ -56,7 +56,8 @@ export function OrganizerEventsScreen({ navigation }) {
         <>
         <HeaderAuthorized navigation={navigation} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <FlatList data={ownerEvents}
+            <FlatList style={{width: "90%"}}
+                      data={ownerEvents}
                       renderItem={({item}) => (
                           <EventMiniOrganizer
                               onPress={() => onOwnerEventPress(item.id)}

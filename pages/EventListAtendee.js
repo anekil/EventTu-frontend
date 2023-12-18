@@ -69,7 +69,8 @@ export function ListScreen({ navigation }) {
         </HeaderAuthorized>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             { availEvents.length > 0
-                ? <FlatList data={availEvents}
+                ? <FlatList style={{width: "90%"}}
+                            data={availEvents}
                             extraData={refresh}
                             onPress={()=>{setRefresh(!refresh)}}
                             renderItem={({item}) => (
